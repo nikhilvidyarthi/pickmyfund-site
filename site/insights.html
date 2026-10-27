@@ -45,7 +45,7 @@ h1 .g{color:var(--gold)}
 /* ticker */
 .ticker{border-block:1px solid var(--line);background:var(--band);overflow:hidden}
 .track{display:flex;gap:40px;padding:16px 0;width:max-content;animation:tick 60s linear infinite}
-.ticker:hover .track{animation-play-state:paused}
+.ticker:hover .track,.ticker:active .track{animation-play-state:paused}
 .tk{display:flex;gap:10px;align-items:baseline;font-size:15px;white-space:nowrap}
 .tk span:first-child{color:var(--muted);font-weight:500}
 .tk b{font-weight:700}
@@ -120,7 +120,7 @@ footer p{margin:0}
 .rv{opacity:1;transform:none;transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .js .rv.pre{opacity:0;transform:translateY(24px)}
 @media (max-width:760px){.navl,.hide-m{display:none!important}.quad{grid-template-columns:1fr}.cta{padding:28px}.cta input{width:100%}}
-@media (prefers-reduced-motion:reduce){.track{animation:none}.rv,.js .rv.pre{opacity:1;transform:none;transition:none}}
+@media (prefers-reduced-motion:reduce){.ticker{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.ticker::-webkit-scrollbar{display:none}.track{animation:none;padding-inline:16px}.rv,.js .rv.pre{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body style="margin:0">
