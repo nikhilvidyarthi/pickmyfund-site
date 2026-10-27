@@ -37,6 +37,24 @@ YEAR_SERIES = {"Nifty 50": "^NSEI", "Nifty Midcap 100": "NIFTY_MIDCAP_100.NS", "
                "Gold": "GOLD_INR", "S&P 500": "SPX_INR"}
 
 
+def download(tickers, attempts=3, **kw):
+    """yf.download with retries: Yahoo sometimes rate-limits GitHub's servers for a minute or two."""
+    import time
+    last = None
+    for i in range(attempts):
+        try:
+            df = yf.download(tickers, group_by="ticker", auto_adjust=False, threads=True, progress=False, **kw)
+            got = sum(1 for t in tickers if closes(df, t) is not None)
+            if got >= max(1, len(tickers) // 2):
+                return df
+            last = f"only {got}/{len(tickers)} symbols returned"
+        except Exception as e:
+            last = str(e)
+        time.sleep(30 * (i + 1))
+    print("WARN download:", last)
+    return df if 'df' in locals() else pd.DataFrame()
+
+
 def r2(x):
     return None if x is None or (isinstance(x, float) and (math.isnan(x) or math.isinf(x))) else round(float(x), 2)
 
@@ -245,7 +263,11 @@ def nse_history(index_name, years=6):
         r = _NSE_SESSION.post("https://www.niftyindices.com/Backpage.aspx/getHistoricaldatatabletoString",
                               data=json.dumps({"cinfo": cinfo}), timeout=30)
         r.raise_for_status()
-        rows = json.loads(r.json()["d"])
+        try:
+            payload = r.json()["d"]
+            rows = json.loads(payload) if isinstance(payload, str) else payload
+        except Exception:
+            raise RuntimeError(f"unexpected reply {r.status_code} {r.headers.get('content-type')}: {r.text[:160]!r}")
         if not rows:
             break
         frames.append(pd.DataFrame(rows))
@@ -269,7 +291,7 @@ def main():
     now = dt.datetime.now(IST)
 
     syms = sorted({s for _, s in INDICES + SECTORS} | {"SI=F", "INR=X", "^GSPC", "^NDX", "^INDIAVIX", "GC=F"})
-    df = yf.download(syms, period="6y", interval="1d", group_by="ticker", auto_adjust=False, threads=True, progress=False)
+    df = download(syms, period="6y", interval="1d")
     ser = {s: closes(df, s) for s in syms}
     inr = ser.get("INR=X")
     if ser.get("GC=F") is not None and inr is not None:  # international gold converted to ₹ per 10 g
@@ -286,7 +308,8 @@ def main():
         for name, s in lst:
             c, h = ser.get(s), highs(df, s)
             stale = c is not None and len(c) > 30 and ser.get("^NSEI") is not None and c.index[-1] < ser["^NSEI"].index[-1]
-            if (c is None or len(c) < 30 or stale) and name in NSE_NAMES:
+            yahoo_ok = ser.get("^NSEI") is not None
+            if yahoo_ok and (c is None or len(c) < 30 or stale) and name in NSE_NAMES:
                 try:
                     c, h = nse_history(NSE_NAMES[name], 6 if full else 2)
                     sources[name] = "niftyindices"
@@ -308,7 +331,9 @@ def main():
         c = ser.get(s)
         if c is None or len(c) < 30:
             log.append(f"assets: {name} unavailable, kept previous")
-            if name in old_assets: assets.append(old_assets[name])
+            key0 = name.split(" (")[0]
+            prev_card = old_assets.get(name) or next((v for k, v in old_assets.items() if k.split(" (")[0] == key0), None)
+            if prev_card: assets.append(prev_card)
             continue
         m = metrics(c, None, False)
         assets.append({"name": name, "unit": unit, **{k: m[k] for k in ("close", "d1", "w1", "m1", "ytd", "y1")}})
@@ -324,7 +349,7 @@ def main():
     n50 = pd.read_csv(ROOT / "data" / "nifty50.csv")["symbol"].tolist()
     try:
         tick = sorted({to_y(s) for s in n500 + n50})
-        bd = yf.download(tick, period="14mo", interval="1d", group_by="ticker", auto_adjust=False, threads=True, progress=False)
+        bd = download(tick, period="14mo", interval="1d")
         adv = dec = unch = a50 = a200 = n50c = n200c = nh = nl = tot = 0
         rows = {}
         for s in n500:
@@ -370,8 +395,10 @@ def main():
             src = YEAR_SERIES.get(sr["name"], "")
             if src in ("GOLD_INR", "SPX_INR"):
                 try:
-                    lng = yf.download(["GC=F", "^GSPC", "INR=X"], period="12y", interval="1mo", group_by="ticker", auto_adjust=False, progress=False)
+                    lng = download(["GC=F", "^GSPC", "INR=X"], period="12y", interval="1mo")
                     fx = closes(lng, "INR=X"); base = closes(lng, "GC=F" if src == "GOLD_INR" else "^GSPC")
+                    if fx is None or base is None:
+                        raise RuntimeError("monthly history unavailable")
                     v = (base * fx.reindex(base.index, method="ffill")).dropna()
                     ye = v.groupby(v.index.year).last()
                     for i, lab in enumerate(labels):
@@ -395,7 +422,7 @@ def main():
         data["years"] = years
 
     nifty = ser.get("^NSEI")
-    last = nifty.index[-1].date() if nifty is not None else now.date()
+    last = nifty.index[-1].date() if nifty is not None else dt.date.fromisoformat(prev.get("as_of", str(now.date())))
     open_now = now.weekday() < 5 and dt.time(9, 15) <= now.time() <= dt.time(15, 30) and last == now.date()
     data.update({"as_of": str(last), "live": bool(open_now),
                  "snap_ist": now.strftime("%-I:%M %p IST").lower().replace(" ist", " IST") if open_now else "close",
