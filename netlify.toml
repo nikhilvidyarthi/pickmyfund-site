@@ -3,10 +3,6 @@
   publish = "site"
   command = "echo 'static site, nothing to build'"
 
-[build.environment]
-  # stop Netlify from installing Python or Node for this static site
-  PYTHON_VERSION = ""
-
 [[headers]]
   for = "/data.json"
   [headers.values]
