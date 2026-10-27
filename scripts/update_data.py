@@ -294,7 +294,8 @@ def main():
     data.update({"as_of": str(last), "live": bool(open_now),
                  "snap_ist": now.strftime("%-I:%M %p IST").lower().replace(" ist", " IST") if open_now else "close",
                  "source": "Yahoo Finance via yfinance (may be delayed)"})
-    order = ["as_of", "live", "snap_ist", "source", "indices", "sectors", "assets", "years", "breadth", "movers", "bond_meta", "bond_hist"]
+    data["warnings"] = log
+    order = ["as_of", "live", "snap_ist", "source", "warnings", "indices", "sectors", "assets", "years", "breadth", "movers", "bond_meta", "bond_hist"]
     OUT.write_text(json.dumps({k: data.get(k) for k in order}, ensure_ascii=False, indent=1))
     print("as_of", data["as_of"], "live", data["live"], "| indices", len(data["indices"]), "sectors", len(data["sectors"]))
     for l in log: print("WARN", l)
