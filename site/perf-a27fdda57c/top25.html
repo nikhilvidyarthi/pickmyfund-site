@@ -20,13 +20,14 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F4F1EA'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' font-weight='700' fill='%238A6410' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cream:#F4F1EA; --panel:#ECE7DB; --panel2:#E4DECE;
-  --gold:#8A6410; --goldlt:#C29A3E; --ink:#1C1C1C; --grey:#6E6E6E;
-  --rule:#D6CDBA; --muted:#BDB5A4; --brick:#9C3A2E; --green:#2E6B3E;
-  --dis:'Lora',Georgia,serif; --utl:'Poppins',-apple-system,'Segoe UI',sans-serif;
+  --cream:#0A1517; --panel:#0F1F22; --panel2:#1A2B2E;
+  --gold:#C9A44C; --goldlt:#8C7238; --ink:#FAFAF7; --grey:#94A3A6;
+  --rule:#1F3033; --muted:#7F8E91; --brick:#E0796B; --green:#4FB59A;
+  --dis:Inter,system-ui,-apple-system,'Segoe UI',sans-serif; --utl:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--cream);color:var(--ink);font-family:var(--utl);
@@ -173,6 +174,49 @@ footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);
 .booktoggle button{font-family:Poppins,sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--rule);background:transparent;color:var(--grey);border-radius:4px;cursor:pointer}
 .booktoggle button.on{background:var(--gold);border-color:var(--gold);color:#fff}
 @media print{.booktoggle{display:none}}
+
+/* ---------- PickMyFund look ---------- */
+body{font-size:16px}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding:64px 0 24px}
+h1{font-weight:800;letter-spacing:-1.5px;font-size:clamp(44px,6vw,68px)}
+.tag{font-style:normal;font-weight:600;font-size:18px;color:var(--gold);margin-top:10px}
+.eyebrow{font-size:12px;letter-spacing:3px;color:var(--gold);font-weight:600}
+.asof{color:var(--grey)}
+.booktoggle{gap:8px;margin-top:24px;padding:4px;border:1px solid var(--rule);border-radius:999px;background:var(--panel);display:inline-flex;flex-wrap:wrap}
+.booktoggle button{font-family:var(--utl);font-size:14px;letter-spacing:0;text-transform:none;font-weight:600;padding:10px 18px;border:0;border-radius:999px;background:transparent;color:var(--grey);min-height:42px}
+.booktoggle button.on{background:var(--gold);color:#0A1517}
+.hero{background:var(--panel);border:1px solid var(--rule);border-radius:28px;padding:32px;margin-top:28px}
+.idxval{font-weight:800;letter-spacing:-2px}
+.stats{gap:16px;background:transparent;border:0}
+.stat{background:var(--panel);border:1px solid var(--rule);border-radius:20px;padding:20px 22px}
+.stat .n{font-weight:800;letter-spacing:-.5px}
+.stat .l{letter-spacing:1.5px;color:var(--grey)}
+section{margin-top:72px}
+.shead{border-bottom:0;padding-bottom:0;margin-bottom:22px}
+h2{font-weight:800;letter-spacing:-1px;font-size:clamp(26px,3.2vw,36px)}
+.sdesc{font-size:15px;color:#B7C2C3;margin-top:8px}
+.scrub{border-radius:24px;padding:22px 24px}
+.wkdate{font-weight:800;letter-spacing:-.5px}
+button{border-radius:999px;background:transparent;border:1.5px solid #3A4A4D;color:var(--ink);font-weight:600;padding:9px 18px;min-height:40px}
+button:hover:not(:disabled){background:var(--panel2)}
+table{background:var(--panel);border:1px solid var(--rule);border-radius:20px;border-collapse:separate;border-spacing:0;overflow:hidden}
+th{background:var(--panel);color:var(--grey);letter-spacing:1.5px;padding:14px 12px}
+td{padding:12px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#13272A}
+.zone{border-radius:999px;padding:3px 9px;font-weight:600}
+.zone.L{color:#0A1517}
+.zone.C{color:var(--grey);border-color:#3A4A4D}
+.cname{color:var(--grey)}
+.chip{border-radius:999px;background:var(--panel);padding:5px 12px}
+.chip.in{border-color:var(--gold)}
+.cell{border-radius:2px}
+footer{color:var(--grey);font-size:13px}
+footer strong{color:#B7C2C3!important}
+.rule{border-top-color:var(--rule)}
+@media (max-width:860px){th,td{padding:10px 6px;font-size:13px}th{letter-spacing:.5px}table{border-radius:16px}.hero{padding:22px}.stats{grid-template-columns:repeat(2,1fr);gap:12px}}
+@media print{body{background:#fff;color:#000}}
 </style>
 </head>
 <body>
@@ -335,15 +379,15 @@ function drawChart(){
   const splitIdx = M.widen ? a.findIndex(p=>p.d===M.widen) : -1;
   const last = a[a.length-1];
   let s = '';
-  [100].forEach(v=>{ s += `<line x1="${P.l}" y1="${Y(v)}" x2="${W-P.r}" y2="${Y(v)}" stroke="#D6CDBA" stroke-width="1" stroke-dasharray="3 3"/>`; });
-  if(splitIdx>0) s += `<line x1="${X(splitIdx)}" y1="${P.t}" x2="${X(splitIdx)}" y2="${H-P.b}" stroke="#C29A3E" stroke-width="1" stroke-dasharray="4 4"/>`;
-  s += `<path d="${path(b)}" fill="none" stroke="#BDB5A4" stroke-width="2"/>`;
-  s += `<path d="${path(a)} L${X(a.length-1)},${H-P.b} L${X(0)},${H-P.b} Z" fill="#8A6410" opacity=".08"/>`;
-  s += `<path d="${path(a)}" fill="none" stroke="#8A6410" stroke-width="2.6" stroke-linejoin="round"/>`;
-  s += `<circle cx="${X(a.length-1)}" cy="${Y(last.v)}" r="4" fill="#8A6410"/>`;
-  s += `<text x="${W-P.r+8}" y="${Y(last.v)+4}" font-family="Poppins,sans-serif" font-size="12" font-weight="600" fill="#8A6410">${last.v.toFixed(1)}</text>`;
+  [100].forEach(v=>{ s += `<line x1="${P.l}" y1="${Y(v)}" x2="${W-P.r}" y2="${Y(v)}" stroke="#3A4A4D" stroke-width="1" stroke-dasharray="3 3"/>`; });
+  if(splitIdx>0) s += `<line x1="${X(splitIdx)}" y1="${P.t}" x2="${X(splitIdx)}" y2="${H-P.b}" stroke="#8C7238" stroke-width="1" stroke-dasharray="4 4"/>`;
+  s += `<path d="${path(b)}" fill="none" stroke="#94A3A6" stroke-width="2"/>`;
+  s += `<path d="${path(a)} L${X(a.length-1)},${H-P.b} L${X(0)},${H-P.b} Z" fill="#C9A44C" opacity=".14"/>`;
+  s += `<path d="${path(a)}" fill="none" stroke="#C9A44C" stroke-width="2.6" stroke-linejoin="round"/>`;
+  s += `<circle cx="${X(a.length-1)}" cy="${Y(last.v)}" r="4" fill="#C9A44C"/>`;
+  s += `<text x="${W-P.r+8}" y="${Y(last.v)+4}" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#C9A44C">${last.v.toFixed(1)}</text>`;
   const bl = b[b.length-1].v;
-  s += `<text x="${W-P.r+8}" y="${Y(bl)+4}" font-family="Poppins,sans-serif" font-size="12" fill="#6E6E6E">${bl.toFixed(1)}</text>`;
+  s += `<text x="${W-P.r+8}" y="${Y(bl)+4}" font-family="Inter,sans-serif" font-size="12" fill="#94A3A6">${bl.toFixed(1)}</text>`;
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   svg.innerHTML = s;
 }
@@ -384,10 +428,10 @@ function renderWeek(i){
   $('tbody').innerHTML = w.holdings.map((h,n)=>{
     const isNew = w.ins.includes(h.t);
     const r = (h.rt!==undefined && h.rt!==null) ? h.rt : null;
-    const rc = r===null ? '<span style="color:#BDB5A4">—</span>'
+    const rc = r===null ? '<span style="color:#94A3A6">—</span>'
       : `<span class="${r>=0?'pos':'neg'}">${fmtPct(r)}</span>`;
     const e = h.e;
-    const ec = e===null||e===undefined ? '<span style="color:#BDB5A4">—</span>'
+    const ec = e===null||e===undefined ? '<span style="color:#94A3A6">—</span>'
       : `<span class="${e>=0?'pos':'neg'}">${fmtPct(e)}</span>`;
     return `<tr>
       <td class="rk">${n+1}</td>
@@ -395,7 +439,7 @@ function renderWeek(i){
       <td><span class="zone ${h.c}">${h.c==='L'?'LEAD':(h.c==='C'?'LIQUID · '+(h.wt||10).toFixed(2)+'%':'TREND')}</span></td>
       <td class="num">${rc}</td>
       <td class="num">${ec}</td>
-      <td class="num hidesm" style="color:#6E6E6E;font-size:12px">${h.wk||h.held} wk${(h.sp&&h.sp>1)?` \u00b7 ${h.sp} spells`:''}</td>
+      <td class="num hidesm" style="color:#94A3A6;font-size:12px">${h.wk||h.held} wk${(h.sp&&h.sp>1)?` \u00b7 ${h.sp} spells`:''}</td>
     </tr>`;
   }).join('');
 
@@ -441,14 +485,14 @@ function renderMonths(){
     const note = live ? (M.pre_label + ' \u2219 live') : (M.pre_label + ' book');
     const n5 = (m.n5r===null||m.n5r===undefined) ? null : m.n5r;
     const lead = n5===null ? null : m.r - n5;
-    return `<tr${live?' style="background:#FFF9EC"':''}>
+    return `<tr${live?' style="background:#13272A"':''}>
       <td class="tk">${label}</td>
-      <td style="color:#6E6E6E;font-size:12px">${note}</td>
+      <td style="color:#94A3A6;font-size:12px">${note}</td>
       <td class="num"><span class="${cls}">${fmtPct(m.r)}</span></td>
-      <td class="num" style="color:#6E6E6E">${n5===null?'\u2014':fmtPct(n5)}</td>
+      <td class="num" style="color:#94A3A6">${n5===null?'\u2014':fmtPct(n5)}</td>
       <td class="num">${lead===null?'\u2014':`<span class="${lead>=0?'pos':'neg'}">${lead>=0?'+':''}${lead.toFixed(2)} pp</span>`}</td>
       <td class="num hidesm">${m.v.toFixed(2)}</td>
-      <td class="num hidesm" style="color:#6E6E6E">${fmtPct(m.v-100)}</td>
+      <td class="num hidesm" style="color:#94A3A6">${fmtPct(m.v-100)}</td>
     </tr>`;
   }).join('');
 }
@@ -464,7 +508,7 @@ spx: `Index base 27 Mar 2026 = 100. Constituents are the top 20 S&amp;P 500 stoc
 Weeks before 25 Sep 2026 are reconstructed from public prices on the current S&amp;P 500 membership (survivorship bias present); no screens were published for that period. The live record begins at the 25 Sep 2026 close on the sector-diversified book and live weeks are shaded.
 Returns are equal weighted, in USD, gross of commissions, taxes and currency effects. S&amp;P 500 is a price index.`
 };
-function renderFoot(){ $('foot').innerHTML = FOOT[BOOK] + `<br><br><strong style="color:#6E6E6E">Disclaimer:</strong> This document is prepared solely for educational and informational purposes. It does not constitute an offer, solicitation, or recommendation to buy, sell, or invest in any security, mutual fund, or financial product. Past performance is not indicative of future results. Please consult a qualified financial advisor before making any investment decisions.`; }
+function renderFoot(){ $('foot').innerHTML = FOOT[BOOK] + `<br><br><strong style="color:#94A3A6">Disclaimer:</strong> This document is prepared solely for educational and informational purposes. It does not constitute an offer, solicitation, or recommendation to buy, sell, or invest in any security, mutual fund, or financial product. Past performance is not indicative of future results. Please consult a qualified financial advisor before making any investment decisions.`; }
 
 /* ---------- book switch ---------- */
 function setBook(k){
