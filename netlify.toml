@@ -1,6 +1,11 @@
+# The site is plain HTML: no build step, publish the site/ folder as it is.
 [build]
   publish = "site"
-  command = ""
+  command = "echo 'static site, nothing to build'"
+
+[build.environment]
+  # stop Netlify from installing Python or Node for this static site
+  PYTHON_VERSION = ""
 
 [[headers]]
   for = "/data.json"

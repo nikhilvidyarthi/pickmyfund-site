@@ -13,7 +13,7 @@ which a GitHub Action refreshes every hour while the NSE is open.
 
 ## Run it yourself
 - GitHub → Actions → "Update market data" → **Run workflow** refreshes the data immediately.
-- Locally: `pip install -r requirements.txt && python scripts/update_data.py`
+- Locally: `pip install -r scripts/requirements.txt && python scripts/update_data.py`
 
 ## Notes
 - Data comes from Yahoo Finance through the `yfinance` library: free and unofficial, prices can be
