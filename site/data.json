@@ -4,19 +4,74 @@
  "snap_ist": "close",
  "source": "Yahoo Finance via yfinance (may be delayed)",
  "warnings": [
+  "indices: Nifty 50 (^NSEI) unavailable, kept previous",
+  "indices: Nifty Next 50 not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "indices: Nifty Next 50 (^NSMIDCP) unavailable, kept previous",
+  "indices: Nifty Midcap 100 not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "indices: Nifty Midcap 100 (NIFTY_MIDCAP_100.NS) unavailable, kept previous",
+  "indices: Nifty Midcap 150 not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "indices: Nifty Midcap 150 (NIFTYMIDCAP150.NS) unavailable, kept previous",
+  "indices: Nifty Smallcap 100 not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "indices: Nifty Smallcap 100 (^CNXSC) unavailable, kept previous",
+  "indices: Nifty Smallcap 250 not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "indices: Nifty Smallcap 250 (NIFTYSMLCAP250.NS) unavailable, kept previous",
+  "indices: Nifty 500 not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "indices: Nifty 500 (^CRSLDX) unavailable, kept previous",
+  "indices: Nifty Bank (^NSEBANK) unavailable, kept previous",
+  "indices: Sensex (^BSESN) unavailable, kept previous",
+  "sectors: IT not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: IT (^CNXIT) unavailable, kept previous",
+  "sectors: Pharma not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Pharma (^CNXPHARMA) unavailable, kept previous",
+  "sectors: Auto not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Auto (^CNXAUTO) unavailable, kept previous",
+  "sectors: FMCG not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: FMCG (^CNXFMCG) unavailable, kept previous",
+  "sectors: Metal not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Metal (^CNXMETAL) unavailable, kept previous",
+  "sectors: Realty not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Realty (^CNXREALTY) unavailable, kept previous",
+  "sectors: Energy not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Energy (^CNXENERGY) unavailable, kept previous",
+  "sectors: PSU Banks not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: PSU Banks (^CNXPSUBANK) unavailable, kept previous",
+  "sectors: Private Banks not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Private Banks (NIFTY_PVT_BANK.NS) unavailable, kept previous",
+  "sectors: Financial Services not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Financial Services (NIFTY_FIN_SERVICE.NS) unavailable, kept previous",
+  "sectors: Media not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Media (^CNXMEDIA) unavailable, kept previous",
+  "sectors: Infrastructure not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Infrastructure (^CNXINFRA) unavailable, kept previous",
+  "sectors: PSE not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: PSE (^CNXPSE) unavailable, kept previous",
+  "sectors: Consumption not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
+  "sectors: Consumption (^CNXCONSUM) unavailable, kept previous",
+  "sectors: Defence not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Defence (NIFTY_IND_DEFENCE.NS) unavailable, kept previous",
+  "sectors: Commodities not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Commodities (^CNXCMDT) unavailable, kept previous",
+  "sectors: Healthcare not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Healthcare (NIFTY_HEALTHCARE.NS) unavailable, kept previous",
+  "sectors: Oil & Gas not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Oil & Gas (NIFTY_OIL_AND_GAS.NS) unavailable, kept previous",
+  "sectors: Consumer Durables not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Consumer Durables (NIFTY_CONSR_DURBL.NS) unavailable, kept previous",
+  "sectors: Capital Markets not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: Capital Markets (NIFTY_CAPITAL_MKT.NS) unavailable, kept previous",
+  "sectors: India Digital not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: India Digital (NIFTY_IND_DIGITAL.NS) unavailable, kept previous",
+  "sectors: India Manufacturing not on Yahoo and niftyindices failed (Expecting value: line 1 column 2 (char 1))",
   "sectors: India Manufacturing (NIFTY_INDIA_MFG.NS) unavailable, kept previous",
-  "10Y yield: CCIL fetch failed (no 10-year benchmark found among 7 rows (headers: ['Security Description', 'Maturity Date', 'Bid Amt(Cr.)', 'Bid Yield', 'Bid Price', 'Offer Price', 'Offer Yield', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)', 'Security Description', 'Maturity Date', 'Bid Amt(Cr.)', 'Bid Yield', 'Bid Price', 'Offer Price', 'Offer Yield', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)', 'Security Description', 'Maturity Date', 'Bid Amt(Cr.)', 'Bid Price', 'Bid Yield', 'Offer Yield', 'Offer Price', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)', 'Security Description', 'Maturity Date', 'Settlement Date', 'Bid Amt(Cr.)', 'Bid Yield', 'Bid Price', 'Offer Price', 'Offer Yield', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)', 'Security Description', 'Maturity Date', 'Settlement Date', 'Bid Amt(Cr.)', 'Bid Price', 'Bid Yield', 'Offer Yield', 'Offer Price', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)', 'Security Description', 'Maturity Date', 'Bid Amt(Cr.)', 'Bid Yield', 'Bid Price', 'Offer Price', 'Offer Yield', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)', 'Security Description', 'Maturity Date', 'Bid Amt(Cr.)', 'Bid Price', 'Bid Yield', 'Offer Yield', 'Offer Price', 'Offer Amt(Cr.)', 'LTP', 'LTY', 'LTA', 'TTA(Cr.)'])); kept previous"
+  "assets: Gold ($/oz) unavailable, kept previous",
+  "assets: Silver ($/oz) unavailable, kept previous",
+  "assets: USD/INR unavailable, kept previous",
+  "assets: S&P 500 unavailable, kept previous",
+  "assets: Nasdaq 100 unavailable, kept previous",
+  "assets: India VIX unavailable, kept previous",
+  "breadth/movers: only 0 breadth names; kept previous",
+  "years: Gold rebuild failed ('NoneType' object has no attribute 'reindex')",
+  "years: S&P 500 rebuild failed ('NoneType' object has no attribute 'reindex')"
  ],
  "indices": [
   {
@@ -476,16 +531,6 @@
  ],
  "assets": [
   {
-   "name": "Gold (₹/10g)",
-   "unit": "",
-   "close": 122681.82,
-   "d1": -0.47,
-   "w1": -3.03,
-   "m1": -8.17,
-   "ytd": -2.08,
-   "y1": 8.08
-  },
-  {
    "name": "Silver ($/oz)",
    "unit": "",
    "close": 53.26,
@@ -506,19 +551,6 @@
    "y1": 8.3
   },
   {
-   "name": "India 10Y G-sec yield",
-   "unit": "%",
-   "close": 7.496,
-   "pp": 0.01,
-   "m1pp": 0.36,
-   "ytdpp": 0.89,
-   "y1pp": 0.95,
-   "d1": null,
-   "m1": null,
-   "y1": null,
-   "note": "· TradingView (seed) 2:32 pm"
-  },
-  {
    "name": "S&P 500",
    "unit": "",
    "close": 7676.77,
@@ -527,6 +559,19 @@
    "m1": -0.86,
    "ytd": 12.14,
    "y1": 13.03
+  },
+  {
+   "name": "India 10Y G-sec yield",
+   "unit": "%",
+   "close": 7.483,
+   "pp": -0.0,
+   "m1pp": 0.35,
+   "ytdpp": 0.88,
+   "y1pp": 0.94,
+   "d1": null,
+   "m1": null,
+   "y1": null,
+   "note": "06.94 GS 2036 · CCIL NDS-OM 3:58 pm"
   },
   {
    "name": "Nasdaq 100",
@@ -741,16 +786,16 @@
   ]
  },
  "bond_meta": {
-  "security": "",
-  "maturity": "",
-  "time": "2:32 pm",
-  "source": "TradingView (seed)"
+  "security": "06.94 GS 2036",
+  "maturity": "2036-05-11",
+  "time": "3:58 pm",
+  "source": "CCIL NDS-OM"
  },
  "bond_hist": {
   "2025-10-27": 6.546,
   "2025-12-31": 6.606,
   "2026-09-27": 7.136,
   "2026-10-26": 7.486,
-  "2026-10-27": 7.496
+  "2026-10-27": 7.4827
  }
 }
