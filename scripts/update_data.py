@@ -76,6 +76,14 @@ def highs(df, sym):
         return None
 
 
+def thin(c):
+    """Chart history: daily for the last ~13 months, every 5th session before that (keeps data.json small)."""
+    days = [(d.date().toordinal() - 719163) for d in c.index]
+    last = days[-1]
+    keep = [i for i in range(len(days)) if days[i] > last - 400 or i % 5 == 0 or i == len(days) - 1]
+    return {"t": [days[i] for i in keep], "c": [round(float(c.iloc[i]), 2) for i in keep]}
+
+
 def ret_since(s, days=None, months=None, years=None):
     end = s.index[-1]
     start = end - (pd.Timedelta(days=days) if days else pd.DateOffset(months=months or 0, years=years or 0))
@@ -301,6 +309,7 @@ def main():
         ser["SPX_INR"] = (ser["^GSPC"] * inr.reindex(ser["^GSPC"].index, method="ffill")).dropna()
 
     sources = {}
+    hist = dict(prev.get("hist") or {})
 
     def build(lst, key, full):
         old = {x["name"]: x for x in prev.get(key, [])}
@@ -321,6 +330,8 @@ def main():
                 if name in old: out.append(old[name])
                 continue
             out.append({"name": name, **metrics(c, h, full)})
+            if key == "indices":
+                hist[name] = thin(c[c.index > c.index[-1] - pd.DateOffset(years=5, days=7)])
         return out
 
     data = {"indices": build(INDICES, "indices", True), "sectors": build(SECTORS, "sectors", False)}
@@ -336,6 +347,8 @@ def main():
             if prev_card: assets.append(prev_card)
             continue
         m = metrics(c, None, False)
+        if s in ("GC=F", "^GSPC"):
+            hist[name] = thin(c[c.index > c.index[-1] - pd.DateOffset(years=5, days=7)])
         assets.append({"name": name, "unit": unit, **{k: m[k] for k in ("close", "d1", "w1", "m1", "ytd", "y1")}})
     bc, bond_hist, bond_meta = bond_card(prev, now, log)
     if bc:
@@ -429,8 +442,9 @@ def main():
                  "source": "Yahoo Finance via yfinance (may be delayed)"})
     if sources:
         log.append("from niftyindices.com: " + ", ".join(sorted(sources)))
+    data["hist"] = hist
     data["warnings"] = log
-    order = ["as_of", "live", "snap_ist", "source", "warnings", "indices", "sectors", "assets", "years", "breadth", "movers", "bond_meta", "bond_hist"]
+    order = ["as_of", "live", "snap_ist", "source", "warnings", "indices", "sectors", "assets", "years", "breadth", "movers", "bond_meta", "bond_hist", "hist"]
     OUT.write_text(json.dumps({k: data.get(k) for k in order}, ensure_ascii=False, indent=1))
     print("as_of", data["as_of"], "live", data["live"], "| indices", len(data["indices"]), "sectors", len(data["sectors"]))
     for l in log: print("WARN", l)

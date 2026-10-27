@@ -117,6 +117,32 @@ footer .in{padding-block:40px 48px;display:flex;flex-direction:column;gap:10px;f
 footer p{margin:0}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 /* reveal */
+/* charts */
+.seg{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--card);margin-bottom:22px;flex-wrap:wrap}
+.seg button{font:600 14px var(--sans);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;min-height:40px}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.mc{padding:18px 18px 10px;position:relative}
+.mc .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.mc .nm{font-size:14px;color:var(--muted);font-weight:600}
+.mc .ch{font-size:14px;font-weight:700}
+.mc .val{font-size:22px;font-weight:800;letter-spacing:-.3px;margin-top:2px}
+.mc svg,.big svg{display:block;width:100%;overflow:visible;touch-action:pan-y}
+.mc .rng{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-top:4px}
+.tip{position:absolute;pointer-events:none;background:#071012;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.5;white-space:nowrap;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.tip b{font-size:13px}
+.big{padding:22px;position:relative}
+.lg{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--muted);margin-bottom:10px}
+.lg i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.bars{padding:22px;margin-bottom:22px}
+.br{display:grid;grid-template-columns:150px 1fr 60px;align-items:center;gap:12px;font-size:14px;padding:3px 0}
+.br .bn{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br .bt{position:relative;height:22px}
+.br .bt i{position:absolute;top:3px;height:16px;border-radius:4px}
+.br .bt span{position:absolute;top:2px;font-size:12px;font-weight:700;white-space:nowrap}
+.br .bt .z{position:absolute;top:0;bottom:0;width:1px;background:#3A4A4D}
+@media (max-width:520px){.br{grid-template-columns:104px 1fr 52px;gap:8px;font-size:13px}}
+.br .bv{text-align:right;font-weight:700;font-size:13px}
 .rv{opacity:1;transform:none;transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .js .rv.pre{opacity:0;transform:translateY(24px)}
 @media (max-width:760px){.navl,.hide-m{display:none!important}.quad{grid-template-columns:1fr}.cta{padding:28px}.cta input{width:100%}}
@@ -150,6 +176,19 @@ footer p{margin:0}
 <div class="qs" id="questions"></div>
 </section>
 
+<section class="blk rv" aria-labelledby="mv-h">
+<h2 id="mv-h">How the main indices have moved</h2>
+<p class="lead">Each chart covers the period you pick. Move across a chart to read any day.</p>
+<div class="seg" role="group" aria-label="Chart period" id="rangeSeg"><button type="button" data-r="30" aria-pressed="false">1M</button><button type="button" data-r="91" aria-pressed="false">3M</button><button type="button" data-r="365" aria-pressed="true">1Y</button><button type="button" data-r="1096" aria-pressed="false">3Y</button><button type="button" data-r="1826" aria-pressed="false">5Y</button></div>
+<div class="mini" id="mini"></div>
+</section>
+
+<section class="blk rv" aria-labelledby="race-h">
+<h2 id="race-h">Large, mid or small caps: who is ahead?</h2>
+<p class="lead">Each index starts at 100 on the first day of the period picked above, so you can compare them directly.</p>
+<div class="card big"><div class="lg" id="raceLg"></div><div id="race"></div></div>
+</section>
+
 <section class="blk rv" aria-labelledby="b-h">
 <h2 id="b-h">How did the broad market do?</h2>
 <p class="lead">Price returns for the main indices. 3Y and 5Y are annualised. The trend tag shows whether the index is above its 200-day average.</p>
@@ -159,6 +198,8 @@ footer p{margin:0}
 <section class="blk rv" aria-labelledby="s-h">
 <h2 id="s-h">Which sectors lead?</h2>
 <p class="lead">Tap a column to sort. Colours run from the weakest to the strongest return in each column.</p>
+<div class="seg" role="group" aria-label="Sector chart period" id="secSeg"><button type="button" data-k="m1" aria-pressed="false">1M</button><button type="button" data-k="m3" aria-pressed="true">3M</button><button type="button" data-k="y1" aria-pressed="false">1Y</button></div>
+<div class="card bars num" id="secbars" role="img" aria-label="Sector returns bar chart"></div>
 <div class="tbox"><table class="num" id="sectors"></table></div>
 </section>
 
@@ -256,6 +297,68 @@ function ranges(rows,cols){const r={};cols.forEach(([k])=>{const v=rows.map(x=>x
 const br_=ranges(D.indices,bc);
 $('broad').innerHTML=`<thead><tr><th scope="col">INDEX</th><th scope="col">CLOSE</th>${bc.map(c=>`<th scope="col">${c[1]}</th>`).join('')}<th scope="col">FROM HIGH</th><th scope="col">TREND</th></tr></thead><tbody>`+
 D.indices.map(x=>`<tr><td class="name">${esc(x.name)}</td><td>${n(x.close,0)}</td>${bc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...br_[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
+
+
+/* ---------- charts ---------- */
+const H=D.hist||{}, DAY=86400000, dfmt=d=>new Date(d*DAY).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'});
+let range=window.__pmfRange||365;
+function cut(name){const h=H[name]; if(!h||!h.t||h.t.length<2)return null; const last=h.t[h.t.length-1], from=last-range; let i=h.t.findIndex(x=>x>=from); if(i<0)i=0; return {t:h.t.slice(i),c:h.c.slice(i)};}
+function hover(svg,box,pts,fmt){ const tip=document.createElement('div');tip.className='tip';tip.hidden=true;box.appendChild(tip);
+  const dot=svg.querySelector('.hdot'), vline=svg.querySelector('.hline');
+  const move=e=>{const r=svg.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width; let i=Math.round(x*(pts.n-1)); i=Math.max(0,Math.min(pts.n-1,i));
+    const p=pts.xy(i); dot.setAttribute('cx',p[0]);dot.setAttribute('cy',p[1]);dot.style.display='';vline.setAttribute('x1',p[0]);vline.setAttribute('x2',p[0]);vline.style.display='';
+    tip.innerHTML=fmt(i); tip.hidden=false; const bx=box.getBoundingClientRect(); let lx=e.clientX-bx.left+12; if(lx+tip.offsetWidth>bx.width)lx=e.clientX-bx.left-tip.offsetWidth-12; tip.style.left=lx+'px'; tip.style.top=(r.top-bx.top+4)+'px';};
+  const hide=()=>{tip.hidden=true;dot.style.display='none';vline.style.display='none'};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerdown',move);svg.addEventListener('pointerleave',hide);}
+const MINI=[['Nifty 50'],['Sensex'],['Nifty Bank'],['Nifty Next 50'],['Nifty Midcap 150'],['Nifty Smallcap 250'],['Nifty 500'],['Gold ($/oz)'],['S&P 500']];
+function drawMini(){ const W=300,Hh=96;
+  $('mini').innerHTML=MINI.filter(([n])=>cut(n)).map(([n],k)=>`<article class="card mc" data-k="${k}"><div class="top"><span class="nm">${esc(n)}</span><span class="ch" data-ch></span></div><div class="val" data-v></div><svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" height="96" role="img" aria-label="${esc(n)} price chart"></svg><div class="rng"><span data-a></span><span data-b></span></div></article>`).join('');
+  $('mini').querySelectorAll('.mc').forEach(el=>{ const nm=MINI[+el.dataset.k][0], s=cut(nm), c=s.c, lo=Math.min(...c), hi=Math.max(...c), pad=(hi-lo)*.08||1;
+    const X=i=>i/(c.length-1)*W, Y=v=>Hh-((v-lo+pad)/(hi-lo+2*pad))*Hh;
+    const d=c.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(''), ch=(c[c.length-1]/c[0]-1)*100, up=ch>=0;
+    const col=up?'var(--up)':'var(--down)';
+    el.querySelector('svg').innerHTML=`<defs><linearGradient id="g${el.dataset.k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${up?'#4FB59A':'#E0796B'}" stop-opacity=".28"/><stop offset="1" stop-color="${up?'#4FB59A':'#E0796B'}" stop-opacity="0"/></linearGradient></defs>
+      <line x1="0" x2="${W}" y1="${Y(c[0])}" y2="${Y(c[0])}" stroke="#3A4A4D" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"/>
+      <path d="${d}L${W} ${Hh}L0 ${Hh}Z" fill="url(#g${el.dataset.k})"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+      <line class="hline" y1="0" y2="${Hh}" stroke="#94A3A6" stroke-width="1" vector-effect="non-scaling-stroke" style="display:none"/><circle class="hdot" r="3.5" fill="${col}" stroke="#0F1F22" stroke-width="2" style="display:none"/>`;
+    el.querySelector('[data-ch]').innerHTML=`<span class="${up?'pos':'neg'}">${f(ch,1)}</span>`;
+    el.querySelector('[data-v]').textContent=n(c[c.length-1],c[c.length-1]>1000?0:2);
+    el.querySelector('[data-a]').textContent=dfmt(s.t[0]); el.querySelector('[data-b]').textContent=dfmt(s.t[s.t.length-1]);
+    hover(el.querySelector('svg'),el,{n:c.length,xy:i=>[X(i),Y(c[i])]},i=>`<b>${n(c[i],c[i]>1000?0:2)}</b><br>${dfmt(s.t[i])} · <span class="${c[i]>=c[0]?'pos':'neg'}">${f((c[i]/c[0]-1)*100,1)}</span>`);
+  });}
+const RACE=[['Nifty 50','#AE8936'],['Nifty Midcap 150','#4E9BD6'],['Nifty Smallcap 250','#D96C8E']];
+function drawRace(){ const W=900,Hh=300,L=44,R=120,T=10,B=26; const ser=RACE.map(([nm,col])=>({nm,col,s:cut(nm)})).filter(x=>x.s);
+  if(ser.length<2){$('race').closest('section').hidden=true;return}
+  const base=ser[0].s.t, idx=ser.map(x=>{const m=new Map(x.s.t.map((t,i)=>[t,x.s.c[i]])); const c0=x.s.c[0]; let lastv=c0; return base.map(t=>{if(m.has(t))lastv=m.get(t); return lastv/c0*100})});
+  const all=idx.flat(), lo=Math.min(...all,100), hi=Math.max(...all,100), pad=(hi-lo)*.08||2;
+  const X=i=>L+i/(base.length-1)*(W-L-R), Y=v=>T+(1-(v-lo+pad)/(hi-lo+2*pad))*(Hh-T-B);
+  const ticks=[];const step=(hi-lo)>40?20:(hi-lo)>16?10:5; for(let v=Math.ceil((lo-pad)/step)*step; v<=hi+pad; v+=step) ticks.push(v);
+  let g=ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v===100?'#5E6B6E':'#1C2B2E'}" ${v===100?'stroke-dasharray="4 4"':''}/><text x="${L-8}" y="${Y(v)+4}" fill="#94A3A6" font-size="12" text-anchor="end">${v}</text>`).join('');
+  g+=`<text x="${L}" y="${Hh-6}" fill="#94A3A6" font-size="12">${dfmt(base[0])}</text><text x="${W-R}" y="${Hh-6}" fill="#94A3A6" font-size="12" text-anchor="end">${dfmt(base[base.length-1])}</text>`;
+  const ends=idx.map((c,k)=>({k,y:Y(c[c.length-1]),v:c[c.length-1]})).sort((a,b)=>a.y-b.y); for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<18) ends[i].y=ends[i-1].y+18;
+  g+=idx.map((c,k)=>`<path d="${c.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('')}" fill="none" stroke="${ser[k].col}" stroke-width="2" stroke-linejoin="round"/>`).join('');
+  g+=ends.map(e=>`<text x="${W-R+8}" y="${e.y+4}" fill="#DCDCD6" font-size="12" font-weight="700">${(e.v-100>=0?'+':'')+(e.v-100).toFixed(1)}%</text><text x="${W-R+60}" y="${e.y+4}" fill="#94A3A6" font-size="11">${esc(ser[e.k].nm.replace('Nifty ',''))}</text>`).join('');
+  g+=`<line class="hline" y1="${T}" y2="${Hh-B}" stroke="#94A3A6" style="display:none"/><circle class="hdot" r="0" style="display:none"/>`;
+  $('race').innerHTML=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Nifty 50, Midcap 150 and Smallcap 250 rebased to 100">${g}</svg>`;
+  $('raceLg').innerHTML=ser.map(x=>`<span><i style="background:${x.col}"></i>${esc(x.nm)}</span>`).join('');
+  hover($('race').querySelector('svg'),$('race').closest('.big'),{n:base.length,xy:i=>[X(i),T]},i=>`<b>${dfmt(base[i])}</b><br>`+ser.map((x,k)=>`<span style="color:${x.col}">●</span> ${esc(x.nm.replace('Nifty ',''))}: ${(idx[k][i]-100>=0?'+':'')+(idx[k][i]-100).toFixed(1)}%`).join('<br>'));
+}
+function drawAllCharts(){drawMini();drawRace();}
+document.querySelectorAll('#rangeSeg button').forEach(b=>b.onclick=()=>{range=window.__pmfRange=+b.dataset.r;document.querySelectorAll('#rangeSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));drawAllCharts();});
+document.querySelectorAll('#rangeSeg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.r===range));
+drawAllCharts();
+
+/* sector bars */
+let secK=window.__pmfSec||'m3';
+function drawBars(){ const rows=D.sectors.filter(s=>s[secK]!=null).sort((a,b)=>b[secK]-a[secK]); const mx=Math.max(...rows.map(s=>Math.abs(s[secK])),1);
+  const neg=rows.some(s=>s[secK]<0), pos=rows.some(s=>s[secK]>0), zero=neg&&pos?mx/(2*mx):neg?1:0; // share of width for negatives
+  const z=neg&&pos?50:neg?100:0;
+  $('secbars').innerHTML=rows.map(s=>{const v=s[secK], w=Math.abs(v)/mx*(neg&&pos?50:100), left=v>=0?z:z-w;
+    return `<div class="br"><span class="bn" title="${esc(s.name)}">${esc(s.name)}</span><span class="bt"><span class="z" style="left:${z}%"></span><i style="left:${left}%;width:${w}%;background:${v>=0?'var(--up)':'var(--down)'}"></i></span><span class="bv ${v>=0?'pos':'neg'}">${f(v,1)}</span></div>`}).join('');
+  $('secbars').setAttribute('aria-label',`Sector returns over ${secK==='m1'?'1 month':secK==='m3'?'3 months':'1 year'}, best ${rows[0].name} ${f(rows[0][secK],1)}, worst ${rows[rows.length-1].name} ${f(rows[rows.length-1][secK],1)}`);
+}
+document.querySelectorAll('#secSeg button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.k===secK);b.onclick=()=>{secK=window.__pmfSec=b.dataset.k;document.querySelectorAll('#secSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));drawBars();}});
+drawBars();
 
 /* sectors (sortable) */
 const sc=[['w1','1W'],['m1','1M'],['m3','3M'],['m6','6M'],['ytd','YTD'],['y1','1Y']];
