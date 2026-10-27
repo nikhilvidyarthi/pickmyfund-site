@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PickMyFund Homepage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A1517}
+a{color:#C9A44C;text-decoration:none}a:hover{color:#E6C77A}
+</style>
+<style>
+html{scroll-behavior:smooth} :root{color-scheme:dark;background:#0A1517} body{background:#0A1517;color:#FAFAF7}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:#0A1517}
+header{top:env(safe-area-inset-top,0px)!important} *{box-sizing:border-box}
+header{transition:background .3s, box-shadow .3s}
+header nav{transition:padding .3s}
+header.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.35)}
+header.scrolled nav{padding-top:10px!important;padding-bottom:10px!important}
+/* ambient glow */
+.amb{position:absolute;left:0;right:0;top:0;height:860px;overflow:hidden;pointer-events:none;z-index:0}
+.amb i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:drift 18s ease-in-out infinite alternate}
+.amb i:nth-child(1){width:520px;height:520px;background:#C9A44C;left:58%;top:8%;opacity:.16}
+.amb i:nth-child(2){width:600px;height:600px;background:#14454A;left:-8%;top:30%;animation-duration:24s}
+.amb i:nth-child(3){width:380px;height:380px;background:#C9A44C;left:30%;top:60%;opacity:.08;animation-duration:20s}
+@keyframes drift{to{transform:translate(60px,-40px) scale(1.15)}}
+#capital::before{content:'';position:absolute;width:700px;height:700px;right:-200px;top:-200px;border-radius:50%;background:#C9A44C;opacity:.09;filter:blur(110px);animation:drift 22s ease-in-out infinite alternate}
+#capital > div{position:relative}
+/* hero phases */
+.ph{transition:color .4s, letter-spacing .4s}
+#top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,#0A1517);z-index:-1;pointer-events:none}
+@media (max-width: 760px){#heroStage{min-height:360px!important}}
+.ph.on{color:#C9A44C!important}
+/* headline */
+h1 .w{display:inline-block;opacity:0;transform:translateY(.45em);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+h1 .uline{background:linear-gradient(#C9A44C,#C9A44C) 0 100%/0% 6px no-repeat;padding-bottom:4px;animation:ul 1s cubic-bezier(.6,0,.2,1) 1.4s forwards}
+@keyframes ul{to{background-size:100% 6px}}
+/* reveals */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+#diff-h + div > div.rv{transform:translateX(-30px)}
+#diff-h + div > div.rv.in{transform:none}
+#diff-h + div > div > div:last-child{position:relative}
+#diff-h + div > div:not(:first-child) > div:last-child::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A44C;transform:scaleY(0);transform-origin:top;transition:transform .8s .4s}
+#diff-h + div > div.in > div:last-child::before{transform:scaleY(1)}
+/* value statement */
+#valueStatement .vw{transition:opacity .35s, color .35s;opacity:.22}
+#valueStatement .vw.lit{opacity:1}
+/* process bars */
+.step::before{content:'';position:absolute;left:0;top:-2px;height:2px;width:100%;background:#C9A44C;transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.6,0,.2,1)}
+.step.in::before{transform:scaleX(1)}
+/* discipline swipe */
+.swipe{display:inline-block;max-width:100%;font-weight:800;font-size:clamp(20px,2.4vw,30px);letter-spacing:-.2px;padding:10px 22px;border-radius:8px;color:#94A3A6;background:linear-gradient(#C9A44C,#C9A44C) 0 0/0% 100% no-repeat;transition:background-size 1.1s cubic-bezier(.6,0,.2,1) .2s, color .5s .7s}
+.swipe.in{background-size:100% 100%;color:#0A1517}
+/* card spotlight + lift */
+.glow{position:relative;overflow:hidden;transition:transform .45s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .45s, opacity .9s cubic-bezier(.2,.7,.2,1)}
+.glow::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(201,164,76,.14),transparent 45%)}
+.glow:hover{transform:translateY(-6px)!important;box-shadow:0 24px 60px rgba(0,0,0,.35);border-color:#A0803E!important}
+.glow:hover::after{opacity:1}
+/* count-up landing */
+[data-to]{display:inline-block;transition:text-shadow .6s}
+[data-to].landed{animation:pulse 1.2s ease-out}
+@keyframes pulse{0%{text-shadow:0 0 0 rgba(201,164,76,0)}30%{text-shadow:0 0 40px rgba(201,164,76,.7);color:#F3DFA8}100%{text-shadow:0 0 0 rgba(201,164,76,0)}}
+/* primary buttons */
+.shine{position:relative;overflow:hidden;transition:transform .2s, box-shadow .3s}
+.shine::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sh 4.5s ease-in-out infinite}
+.shine:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,164,76,.35)}
+@keyframes sh{0%,70%{left:-60%}100%{left:130%}}
+a{transition:color .2s}
+@media (max-width: 760px){header nav > div:nth-child(2){display:none!important} header nav a[href="#login"]{display:none} header nav{gap:12px!important;justify-content:space-between} header nav a.shine{display:none!important} #diff-h + div > div:first-child{display:none!important} #diff-h + div > div:not(:first-child){flex-direction:column} #diff-h + div > div:not(:first-child) > div{flex:none!important;padding:18px 20px!important} #diff-h + div > div:not(:first-child) > div:first-child{font-size:16px!important;padding-bottom:12px!important} #diff-h + div > div:not(:first-child) > div:first-child::before{content:'THE USUAL WAY';display:block;font-size:11px;letter-spacing:2px;font-weight:700;color:#94A3A6;margin-bottom:6px} #diff-h + div > div:not(:first-child) > div:last-child{display:flex;flex-direction:column;font-size:17px!important} #diff-h + div > div:not(:first-child) > div:last-child::after{content:'PICKMYFUND';order:-1;display:block;font-size:11px;letter-spacing:2px;font-weight:700;color:#C9A44C;margin-bottom:6px} header nav small{white-space:nowrap} header nav{padding:12px 16px!important;flex-wrap:nowrap!important} header nav > a span span:last-child{display:none} header nav > a > span{font-size:20px!important} section > div, section{padding-left:20px!important;padding-right:20px!important}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}#valueStatement .vw{opacity:1}.swipe{background-size:100% 100%;color:#0A1517}.step::before{transform:scaleX(1)}}
+</style>
+</head>
+<body style="margin:0">
+<div style="font-family: Inter, system-ui, sans-serif; color: #FAFAF7; background: #0A1517; min-height: 100vh">
+
+<!-- NAV -->
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(10,21,23,0.92); border-bottom: 1px solid #1C2A2D">
+<nav aria-label="Main" style="max-width: 1240px; margin: 0 auto; padding: 18px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+<a href="#top" aria-label="PickMyFund home" style="display: flex; align-items: center; gap: 12px; color: #FAFAF7">
+<svg width="34" height="34" viewBox="0 0 132 132" aria-hidden="true"><path d="M14 22 C14 12 22 6 31 11 L110 55 C119 60 119 72 110 77 L31 121 C22 126 14 120 14 110 Z" fill="none" stroke="#C9A44C" stroke-width="9" stroke-linejoin="round"></path><rect x="27" y="74" width="12" height="18" rx="2" fill="#C9A44C"></rect><rect x="45" y="61" width="12" height="31" rx="2" fill="#C9A44C"></rect><rect x="63" y="48" width="12" height="44" rx="2" fill="#C9A44C"></rect></svg>
+<div style="display: flex; flex-direction: column; line-height: 1.15"><span style="font-size: 22px; font-weight: 700; letter-spacing: -0.3px">pick<span style="color: #C9A44C">my</span>fund<span style="font-weight: 400; font-size: 13px; color: #94A3A6">.com</span></span><small style="display: block; font-size: 12px; font-weight: 500; letter-spacing: 0.2px; color: #B7C2C3; margin-top: 2px">AMFI-registered Mutual Fund Distributor</small></div>
+</a>
+<div style="display: flex; flex-wrap: wrap; gap: 28px; flex: 1 1 400px; justify-content: center; font-size: 15px; font-weight: 500">
+<a href="#engines" style="color: #C9CFCF">Our engines</a>
+<a href="#help" style="color: #C9CFCF">How we help</a>
+<a href="#capital" style="color: #C9CFCF">Capital raising</a>
+<a href="#team" style="color: #C9CFCF">Our team</a>
+<a href="insights.html" style="color: #C9CFCF">Insights</a>
+</div>
+<div style="display: flex; gap: 12px; align-items: center">
+<a href="#login" style="color: #FAFAF7; font-size: 15px; font-weight: 500; padding: 12px 8px">Client login</a>
+<a href="#review" style="background: #C9A44C; color: #0A1517; font-size: 15px; font-weight: 700; padding: 13px 22px; border-radius: 999px">Check my portfolio</a>
+</div>
+</nav>
+</header>
+
+<!-- HERO -->
+<div class="amb" aria-hidden="true"><i></i><i></i><i></i></div>
+<section id="top" style="position: relative; z-index: 1; isolation: isolate; max-width: 1240px; margin: 0 auto; padding: 96px 32px 72px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+<canvas id="heroCanvas" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none"></canvas>
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<div style="align-self: flex-start; border: 1.5px solid #C9A44C; color: #C9A44C; border-radius: 999px; padding: 9px 20px; font-size: 13px; font-weight: 600; letter-spacing: 3px">SIMPLE. CLEAR. INVESTED.</div>
+<h1 style="margin: 0; font-size: clamp(44px, 6vw, 76px); line-height: 1.03; font-weight: 800; letter-spacing: -2px">Markets are noise.<br><span style="color: #C9A44C">We invest on signal.</span></h1>
+<p style="margin: 0; font-size: 20px; line-height: 1.6; color: #B7C2C3; max-width: 560px">Four rules-based engines that screen every stock and every fund, every week, and keep only what makes the cut. No tips. No hunches. One discipline.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href="#review" style="background: #C9A44C; color: #0A1517; font-size: 17px; font-weight: 700; padding: 17px 30px; border-radius: 999px">Book a free portfolio check-up</a>
+<a href="#engines" style="border: 1.5px solid #3A4A4D; color: #FAFAF7; font-size: 17px; font-weight: 600; padding: 16px 28px; border-radius: 999px">See our engines</a>
+</div>
+<div class="aum" style="display: flex; align-items: center; gap: 22px; margin-top: 8px; padding-top: 28px; border-top: 1px solid #1F3033">
+<div style="font-size: clamp(44px, 5vw, 60px); font-weight: 800; letter-spacing: -1.5px; line-height: 1; color: #FAFAF7; white-space: nowrap"><span data-to="400" data-pre="₹" data-suf=" Cr">₹400 Cr</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 600; color: #DCDCD6">Assets under distribution</span><span style="font-size: 14px; color: #94A3A6">As of [DATE]</span></div>
+</div>
+</div>
+<div id="heroStage" style="flex: 1 1 460px; min-width: 0; min-height: 440px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 0">
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: #94A3A6; letter-spacing: 3px; font-weight: 600"><span class="ph" data-phase="0">NOISE</span><span class="ph" data-phase="1">ONE TEST</span><span class="ph" data-phase="2">SIGNAL</span></div>
+<span style="font-size: 12px; color: #7E8B8D; align-self: flex-end">For illustrative purposes only.</span>
+</div>
+</section>
+
+<!-- TRUST STRIP -->
+<section aria-label="Credentials" style="border-top: 1px solid #1C2A2D; border-bottom: 1px solid #1C2A2D; background: #0C1A1C">
+<div style="max-width: 1240px; margin: 0 auto; padding: 26px 32px; display: flex; flex-wrap: wrap; gap: 18px 48px; justify-content: space-between; font-size: 15px; color: #B7C2C3; font-weight: 500">
+<span><strong style="color: #C9A44C">₹400 Cr</strong> assets under distribution</span>
+<span>AMFI-registered Mutual Fund Distributor · ARN-271476</span>
+<span>Rules-based · Data-driven · Disciplined</span>
+<span>Through Agreesha Wealth Finserv LLP</span>
+<a href="#fund-houses" style="color: #C9A44C; font-weight: 600">Fund houses we distribute →</a>
+</div>
+</section>
+
+<!-- VALUE STATEMENT -->
+<section style="max-width: 1240px; margin: 0 auto; padding: 120px 32px 40px">
+<p id="valueStatement" style="margin: 0; font-size: clamp(32px, 4.2vw, 54px); line-height: 1.18; font-weight: 700; letter-spacing: -1px; max-width: 1040px">Most investing still runs on tips, hunches and whatever is trending this week. <span style="color: #C9A44C">We built PickMyFund to run on rules instead.</span></p>
+<p style="margin: 28px 0 0; font-size: 17px; color: #94A3A6">— [Founder name], Co-founder, PickMyFund</p>
+</section>
+
+<!-- DIFFERENT -->
+<section aria-labelledby="diff-h" style="max-width: 1240px; margin: 0 auto; padding: 80px 32px">
+<h2 id="diff-h" style="margin: 0 0 40px; font-size: 40px; font-weight: 800; letter-spacing: -1px">How PickMyFund does things differently</h2>
+<div style="display: flex; flex-direction: column; border: 1px solid #1F3033; border-radius: 24px; overflow: hidden">
+<div style="display: flex; flex-wrap: wrap; background: #0F1F22; font-size: 13px; letter-spacing: 2px; font-weight: 600">
+<div style="flex: 1 1 300px; padding: 20px 32px; color: #94A3A6">THE USUAL WAY</div>
+<div style="flex: 1 1 300px; padding: 20px 32px; color: #C9A44C">PICKMYFUND</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; border-top: 1px solid #1F3033">
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; color: #94A3A6; line-height: 1.5">Ideas from tips, forwards and headlines</div>
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; line-height: 1.5; background: #0D1C1E"><strong>One test, every Friday.</strong> Every stock in the universe is screened and ranked the same way.</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; border-top: 1px solid #1F3033">
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; color: #94A3A6; line-height: 1.5">Buy on conviction, sell on emotion</div>
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; line-height: 1.5; background: #0D1C1E"><strong>Rank-based entry and exit.</strong> A holding stays while it earns its place and leaves when it doesn't.</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; border-top: 1px solid #1F3033">
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; color: #94A3A6; line-height: 1.5">Always long, hoping markets rise</div>
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; line-height: 1.5; background: #0D1C1E"><strong>Market-neutral by design.</strong> Our algo strategies are built to hedge, because markets don't only rise.</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; border-top: 1px solid #1F3033">
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; color: #94A3A6; line-height: 1.5">Funds chosen by what is being pushed</div>
+<div style="flex: 1 1 300px; padding: 28px 32px; font-size: 19px; line-height: 1.5; background: #0D1C1E"><strong>Every fund, same discipline.</strong> Five make the cut, reviewed monthly and rebalanced quarterly.</div>
+</div>
+</div>
+</section>
+
+<!-- ENGINES -->
+<section id="engines" aria-labelledby="eng-h" style="background: #0C1A1C; border-top: 1px solid #1C2A2D; border-bottom: 1px solid #1C2A2D">
+<div style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 48px">
+<div>
+<div style="font-size: 13px; letter-spacing: 3px; color: #C9A44C; font-weight: 600; margin-bottom: 14px">OUR ENGINES</div>
+<h2 id="eng-h" style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05">Four engines.<br><span style="color: #C9A44C">One discipline.</span></h2>
+</div>
+<p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.6; color: #B7C2C3">Each engine applies the same idea to a different market: screen everything, rank it, keep only what makes the cut.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px">
+
+<article style="flex: 1 1 520px; min-width: 0; background: #0F1F22; border: 1px solid #1F3033; border-radius: 28px; padding: 36px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="border: 1.5px solid #A0803E; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 16px">Top 20 <span style="color: #C9A44C; font-weight: 600; font-size: 14px">India</span></span><span style="font-size: 12px; color: #0A1517; background: #C9A44C; letter-spacing: 1.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px">LAUNCHING SOON</span></div>
+<canvas data-kind="top20" aria-hidden="true"></canvas>
+<h3 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">730 NSE stocks. One test. Every Friday.</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #B7C2C3">Twenty make the cut. Weekly rebalance with rank-based entry and exit, so the book keeps leaders and lets laggards go.</p>
+<p style="margin: 0; font-size: 14px; color: #94A3A6">Will run as an algo strategy that selects and invests automatically, once our exchange empanelment as an algo provider is approved.</p>
+<a href="#talk" style="font-weight: 600; font-size: 16px">Get notified when it opens →</a>
+</article>
+
+<article style="flex: 1 1 520px; min-width: 0; background: #0F1F22; border: 1px solid #1F3033; border-radius: 28px; padding: 36px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="border: 1.5px solid #A0803E; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 16px">SPX Top 20 <span style="color: #C9A44C; font-weight: 600; font-size: 14px">USA</span></span><span style="font-size: 12px; color: #0A1517; background: #C9A44C; letter-spacing: 1.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px">LAUNCHING SOON</span></div>
+<canvas data-kind="spx" aria-hidden="true"></canvas>
+<h3 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">Same test. Now on the S&amp;P 500.</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #B7C2C3">Twenty US leaders, capped at five per sector so no single theme dominates. Always invested, rebalanced every week.</p>
+<p style="margin: 0; font-size: 14px; color: #94A3A6">Will run as an algo strategy that selects and invests automatically, once our approvals for US execution are in place.</p>
+<a href="#talk" style="font-weight: 600; font-size: 16px">Get notified when it opens →</a>
+</article>
+
+<article style="flex: 1 1 520px; min-width: 0; background: #0F1F22; border: 1px solid #1F3033; border-radius: 28px; padding: 36px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="border: 1.5px solid #A0803E; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 16px">Algo Desk <span style="color: #C9A44C; font-weight: 600; font-size: 14px">F&amp;O · Crude</span></span><span style="font-size: 12px; color: #0A1517; background: #C9A44C; letter-spacing: 1.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px">LAUNCHING SOON</span></div>
+<canvas data-kind="algo" aria-hidden="true"></canvas>
+<div style="display: flex; gap: 22px; font-size: 14px; font-weight: 600"><span style="color: #94A3A6">Market</span><span style="color: #C9A44C">Hedge</span><span>Net book</span></div>
+<h3 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">Markets don't only rise. So our algos stay neutral.</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #B7C2C3">Systematic strategies in two sessions: F&amp;O in the morning, MCX Crude in the evening. Strategies are built to hedge by rule, not by feel.</p>
+<p style="margin: 0; font-size: 14px; color: #94A3A6">Our algo vendor empanelment with the exchanges is in process. The Algo Desk will open to clients once it is approved.</p>
+<a href="#talk" style="font-weight: 600; font-size: 16px">Get notified when it opens →</a>
+</article>
+
+<article style="flex: 1 1 520px; min-width: 0; background: #0F1F22; border: 1px solid #1F3033; border-radius: 28px; padding: 36px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="border: 1.5px solid #A0803E; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 16px">Select 5 <span style="color: #C9A44C; font-weight: 600; font-size: 14px">MF</span></span><span style="font-size: 13px; color: #94A3A6; letter-spacing: 2px; font-weight: 600">MUTUAL FUNDS</span></div>
+<canvas data-kind="select5" aria-hidden="true"></canvas>
+<h3 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">Every fund. Same discipline. Five make the cut.</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #B7C2C3">A five-fund shortlist where equity sectors, gold, silver and open offshore funds all compete for a place. Reviewed every month, rebalanced every quarter. Every investment goes through a suitability check for your risk profile.</p>
+<a href="#select5" style="font-weight: 600; font-size: 16px">How Select 5 works →</a>
+</article>
+
+</div>
+<div style="text-align: center; margin: 56px 0 8px"><span class="swipe">Rules-based &nbsp;· &nbsp;Data&#8209;driven &nbsp;· &nbsp;Disciplined</span></div>
+<p style="margin: 28px 0 0; font-size: 14px; color: #94A3A6; line-height: 1.6">Illustrations are not actual holdings or recommendations.</p>
+</div>
+</section>
+
+<!-- PROCESS -->
+<section aria-labelledby="proc-h" style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
+<h2 id="proc-h" style="margin: 0 0 44px; font-size: 40px; font-weight: 800; letter-spacing: -1px">One rulebook, every week</h2>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 20px">
+<li class="step" style="flex: 1 1 240px; border-top: 2px solid #1F3033; padding-top: 22px; position: relative"><div style="font-size: 14px; color: #C9A44C; font-weight: 700; letter-spacing: 2px">01</div><h3 style="margin: 10px 0 8px; font-size: 22px; font-weight: 700">Screen</h3><p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B7C2C3">The whole universe goes through the same test after Friday's close.</p></li>
+<li class="step" style="flex: 1 1 240px; border-top: 2px solid #1F3033; padding-top: 22px; position: relative"><div style="font-size: 14px; color: #C9A44C; font-weight: 700; letter-spacing: 2px">02</div><h3 style="margin: 10px 0 8px; font-size: 22px; font-weight: 700">Rank</h3><p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B7C2C3">Every name gets a rank. Only the top makes the cut.</p></li>
+<li class="step" style="flex: 1 1 240px; border-top: 2px solid #1F3033; padding-top: 22px; position: relative"><div style="font-size: 14px; color: #C9A44C; font-weight: 700; letter-spacing: 2px">03</div><h3 style="margin: 10px 0 8px; font-size: 22px; font-weight: 700">Rebalance</h3><p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B7C2C3">Entries and exits follow the rules, with buffers so the book doesn't churn.</p></li>
+<li class="step" style="flex: 1 1 240px; border-top: 2px solid #1F3033; padding-top: 22px; position: relative"><div style="font-size: 14px; color: #C9A44C; font-weight: 700; letter-spacing: 2px">04</div><h3 style="margin: 10px 0 8px; font-size: 22px; font-weight: 700">Report</h3><p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B7C2C3">You get a clear weekly note on what changed and why.</p></li>
+</ol>
+</section>
+
+<!-- HOW WE HELP -->
+<section id="help" aria-labelledby="help-h" style="max-width: 1240px; margin: 0 auto; padding: 20px 32px 110px">
+<h2 id="help-h" style="margin: 0 0 44px; font-size: 40px; font-weight: 800; letter-spacing: -1px">How PickMyFund can help you</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 24px">
+<article style="flex: 1 1 340px; background: #FAFAF7; color: #0F1B1E; border-radius: 28px; padding: 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="font-size: 13px; letter-spacing: 2px; font-weight: 700; color: #7A5F22">EXISTING INVESTMENTS</div>
+<h3 style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px">Portfolio check-up</h3>
+<ul style="margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.8; color: #3C4A4D"><li>See overlap, costs and category mix in one view</li><li>Understand what each fund holds and charges</li><li>Free one-on-one call to walk through the facts</li></ul>
+<a href="#review" style="align-self: flex-start; background: #0A1517; color: #FAFAF7; font-weight: 700; font-size: 16px; padding: 15px 26px; border-radius: 999px; margin-top: 8px">Check my portfolio</a>
+</article>
+<article style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 28px; padding: 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="font-size: 13px; letter-spacing: 2px; font-weight: 700; color: #C9A44C">NEW MONEY</div>
+<h3 style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px">Invest through our engines</h3>
+<ul style="margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.8; color: #B7C2C3"><li>Mutual funds via Select 5</li><li>Top 20 and SPX Top 20 algo strategies, once approved</li><li>A weekly note on every change</li></ul>
+<a href="#talk" style="align-self: flex-start; border: 1.5px solid #3A4A4D; color: #FAFAF7; font-weight: 600; font-size: 16px; padding: 14px 24px; border-radius: 999px; margin-top: 8px">Talk with us</a>
+</article>
+<article style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 28px; padding: 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="font-size: 13px; letter-spacing: 2px; font-weight: 700; color: #C9A44C">FOR CORPORATES</div>
+<h3 style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px">Treasury management</h3>
+<ul style="margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.8; color: #B7C2C3"><li>Arbitrage mutual funds for idle cash</li><li>Algo setup, once our exchange empanelment is approved</li><li>Reporting your finance team can use</li></ul>
+<a href="#talk" style="align-self: flex-start; border: 1.5px solid #3A4A4D; color: #FAFAF7; font-weight: 600; font-size: 16px; padding: 14px 24px; border-radius: 999px; margin-top: 8px">Talk with us</a>
+</article>
+</div>
+</section>
+
+<!-- CAPITAL -->
+<section id="capital" aria-labelledby="cap-h" style="position: relative; overflow: hidden; background: #0C1A1C; border-top: 1px solid #1C2A2D; border-bottom: 1px solid #1C2A2D">
+<div style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
+<div style="font-size: 13px; letter-spacing: 3px; color: #C9A44C; font-weight: 600; margin-bottom: 14px">CAPITAL STORIES</div>
+<h2 id="cap-h" style="margin: 0 0 44px; font-size: clamp(36px, 4.5vw, 56px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05">Capital <span style="color: #C9A44C">we've raised.</span></h2>
+<div style="display: flex; flex-wrap: wrap; gap: 24px">
+<article style="flex: 1 1 480px; border: 1px solid #3A3320; background: #111D1B; border-radius: 28px; padding: 44px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 14px; letter-spacing: 3px; color: #C9A44C; font-weight: 600">OPEN SECRET</div>
+<div style="font-size: clamp(64px, 8vw, 112px); font-weight: 800; letter-spacing: -3px; line-height: 1"><span data-to="50" data-pre="₹" data-suf=" Cr">₹50 Cr</span></div>
+<div style="font-size: 20px; font-weight: 600; color: #DCDCD6">Raised as sole fund-raise partner</div>
+<div style="font-size: 16px; color: #94A3A6">Growth round · 2026</div>
+</article>
+<article style="flex: 1 1 480px; border: 1px solid #3A3320; background: #111D1B; border-radius: 28px; padding: 44px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 14px; letter-spacing: 3px; color: #C9A44C; font-weight: 600">ATOMIC CAPITAL</div>
+<div style="font-size: clamp(64px, 8vw, 112px); font-weight: 800; letter-spacing: -3px; line-height: 1"><span data-to="100" data-pre="₹" data-suf=" Cr">₹100 Cr</span></div>
+<div style="font-size: 20px; font-weight: 600; color: #DCDCD6">Raised for the fund · raise closed</div>
+<div style="font-size: 16px; color: #94A3A6">Consumer-focused venture fund</div>
+</article>
+</div>
+<a href="#talk" style="display: inline-block; margin-top: 36px; font-weight: 600; font-size: 17px">Raising capital? Talk to us →</a>
+</div>
+</section>
+
+<!-- TEAM -->
+<section id="team" aria-labelledby="team-h" style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
+<h2 id="team-h" style="margin: 0 0 44px; font-size: 40px; font-weight: 800; letter-spacing: -1px">The people behind the rules</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 24px">
+<article style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div role="img" aria-label="Photo placeholder" style="aspect-ratio: 1 / 1; background: #13272A; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 64px; font-weight: 800; color: #3E5558">NV</div>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Nikhil Vidyarthi</h3>
+<div style="font-size: 16px; color: #C9A44C; font-weight: 600">Co-founder</div>
+<p style="margin: 0; font-size: 16px; color: #B7C2C3; line-height: 1.6">[Short bio: focus areas and experience]</p>
+</article>
+<article style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div role="img" aria-label="Photo placeholder" style="aspect-ratio: 1 / 1; background: #13272A; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 64px; font-weight: 800; color: #3E5558">RR</div>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Ruchi Rathi</h3>
+<div style="font-size: 16px; color: #C9A44C; font-weight: 600">Co-founder</div>
+<p style="margin: 0; font-size: 16px; color: #B7C2C3; line-height: 1.6">[Short bio: focus areas and experience]</p>
+</article>
+<article style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div role="img" aria-label="Photo placeholder" style="aspect-ratio: 1 / 1; background: #13272A; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 64px; font-weight: 800; color: #3E5558">SR</div>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Shreeta Rege</h3>
+<div style="font-size: 16px; color: #C9A44C; font-weight: 600">Partner</div>
+<p style="margin: 0; font-size: 16px; color: #B7C2C3; line-height: 1.6">[Short bio: focus areas and experience]</p>
+</article>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section aria-labelledby="voices-h" style="max-width: 1240px; margin: 0 auto; padding: 0 32px 110px">
+<h2 id="voices-h" style="margin: 0 0 44px; font-size: 40px; font-weight: 800; letter-spacing: -1px">In our clients' words</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 24px">
+<figure style="flex: 1 1 340px; margin: 0; border: 1.5px dashed #3A4848; border-radius: 24px; padding: 32px; min-height: 220px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px"><blockquote style="margin: 0; font-size: 20px; line-height: 1.5; color: #B7C2C3">[Client quote, with permission]</blockquote><figcaption style="font-size: 15px; color: #94A3A6">[Name], [Role]</figcaption></figure>
+<figure style="flex: 1 1 340px; margin: 0; border: 1.5px dashed #3A4848; border-radius: 24px; padding: 32px; min-height: 220px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px"><blockquote style="margin: 0; font-size: 20px; line-height: 1.5; color: #B7C2C3">[Client quote, with permission]</blockquote><figcaption style="font-size: 15px; color: #94A3A6">[Name], [Role]</figcaption></figure>
+<figure style="flex: 1 1 340px; margin: 0; border: 1.5px dashed #3A4848; border-radius: 24px; padding: 32px; min-height: 220px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px"><blockquote style="margin: 0; font-size: 20px; line-height: 1.5; color: #B7C2C3">[Client video or quote, with permission]</blockquote><figcaption style="font-size: 15px; color: #94A3A6">[Name], [Role]</figcaption></figure>
+</div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights" aria-labelledby="ins-h" style="background: #0C1A1C; border-top: 1px solid #1C2A2D">
+<div style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 44px"><h2 id="ins-h" style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -1px">Insights</h2><a href="insights.html" style="font-weight: 600; font-size: 16px">Market insights →</a></div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px">
+<a href="#a1" style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">METHOD</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">Why we run one test, every Friday</span><span style="font-size: 15px; color: #94A3A6">[Read time]</span></a>
+<a href="#a2" style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">ALGO DESK</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">Market-neutral, explained simply</span><span style="font-size: 15px; color: #94A3A6">[Read time]</span></a>
+<a href="#a3" style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">MUTUAL FUNDS</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">How Select 5 lets gold, silver and offshore compete</span><span style="font-size: 15px; color: #94A3A6">[Read time]</span></a>
+</div>
+</div>
+</section>
+
+<!-- VISIT -->
+<section id="talk" aria-labelledby="visit-h" style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
+<div style="background: #C9A44C; color: #0A1517; border-radius: 32px; padding: 56px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between">
+<div style="flex: 1 1 460px; display: flex; flex-direction: column; gap: 14px">
+<h2 id="visit-h" style="margin: 0; font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1.1">Come meet us in Pune</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.6">Unit No. 1A, First Floor, Sampada Apartment, Shree Krishna Nagar, Senapati Bapat Road, Pune 411016</p>
+<p style="margin: 0; font-size: 18px; font-weight: 600">+91 77559 47128 · comms@pickmyfund.com</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href="#review" style="background: #0A1517; color: #FAFAF7; font-size: 17px; font-weight: 700; padding: 17px 30px; border-radius: 999px">Book a free portfolio check-up</a>
+<a href="#whatsapp" style="border: 2px solid #0A1517; color: #0A1517; font-size: 17px; font-weight: 700; padding: 15px 28px; border-radius: 999px">Chat on WhatsApp</a>
+</div>
+</div>
+</section>
+
+<!-- FUND HOUSES -->
+<section id="fund-houses" aria-labelledby="fh-h" style="max-width: 1240px; margin: 0 auto; padding: 0 32px 96px">
+<h2 id="fh-h" style="margin: 0 0 12px; font-size: 32px; font-weight: 800; letter-spacing: -0.5px">Mutual fund houses we distribute</h2>
+<p style="margin: 0 0 28px; font-size: 16px; color: #B7C2C3; max-width: 760px; line-height: 1.6">We are empanelled with the fund houses below as a mutual fund distributor. Regular plans involve payment of commission to mutual fund distributors.</p>
+<div style="overflow-x: auto; border: 1px solid #1F3033; border-radius: 20px">
+<table style="width: 100%; border-collapse: collapse; font-size: 16px; min-width: 520px">
+<thead><tr style="background: #0F1F22; text-align: left"><th scope="col" style="padding: 16px 24px; font-size: 13px; letter-spacing: 2px; color: #94A3A6; font-weight: 600">MUTUAL FUND</th><th scope="col" style="padding: 16px 24px; font-size: 13px; letter-spacing: 2px; color: #94A3A6; font-weight: 600">SEBI REGISTRATION NO.</th></tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #1F3033"><td style="padding: 16px 24px">[Mutual fund name]</td><td style="padding: 16px 24px; color: #B7C2C3">[MF/XXX/XX/XX]</td></tr>
+<tr style="border-top: 1px solid #1F3033"><td style="padding: 16px 24px">[Mutual fund name]</td><td style="padding: 16px 24px; color: #B7C2C3">[MF/XXX/XX/XX]</td></tr>
+<tr style="border-top: 1px solid #1F3033"><td style="padding: 16px 24px">[Mutual fund name]</td><td style="padding: 16px 24px; color: #B7C2C3">[MF/XXX/XX/XX]</td></tr>
+</tbody></table></div>
+<a href="#commission" style="display: inline-block; margin-top: 20px; font-weight: 600; font-size: 16px">Commission disclosure →</a>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top: 1px solid #1C2A2D; background: #071012">
+<div style="max-width: 1240px; margin: 0 auto; padding: 72px 32px 48px; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between">
+<div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 24px; font-weight: 700">pick<span style="color: #C9A44C">my</span>fund<span style="font-weight: 400; font-size: 14px; color: #94A3A6">.com</span></span><span style="font-size: 13px; color: #DCDCD6; font-weight: 500">AMFI-registered Mutual Fund Distributor · ARN-271476</span></div>
+<span style="font-size: 13px; letter-spacing: 3px; color: #C9A44C; font-weight: 600">SIMPLE. CLEAR. INVESTED.</span>
+<form style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px"><label for="nl" style="flex-basis: 100%; font-size: 15px; color: #B7C2C3">Get the weekly note</label><input id="nl" type="email" placeholder="you@email.com" style="flex: 1 1 200px; background: #0F1F22; border: 1px solid #2A3B3E; border-radius: 999px; padding: 13px 18px; color: #FAFAF7; font-size: 15px; font-family: inherit"><button type="submit" style="background: #C9A44C; color: #0A1517; border: 0; border-radius: 999px; padding: 13px 22px; font-weight: 700; font-size: 15px; font-family: inherit">Subscribe</button></form>
+</div>
+<nav aria-label="Engines" style="flex: 0 1 180px; display: flex; flex-direction: column; gap: 12px; font-size: 15px"><span style="color: #94A3A6; font-weight: 600; letter-spacing: 1px">ENGINES</span><a href="#top20" style="color: #DCDCD6">Top 20 India</a><a href="#spx" style="color: #DCDCD6">SPX Top 20</a><a href="#algo" style="color: #DCDCD6">Algo Desk</a><a href="#select5" style="color: #DCDCD6">Select 5</a></nav>
+<nav aria-label="Company" style="flex: 0 1 180px; display: flex; flex-direction: column; gap: 12px; font-size: 15px"><span style="color: #94A3A6; font-weight: 600; letter-spacing: 1px">COMPANY</span><a href="#team" style="color: #DCDCD6">Our team</a><a href="#capital" style="color: #DCDCD6">Capital raising</a><a href="#insights" style="color: #DCDCD6">Videos &amp; blogs</a><a href="#talk" style="color: #DCDCD6">Contact</a></nav>
+<nav aria-label="Legal" style="flex: 0 1 180px; display: flex; flex-direction: column; gap: 12px; font-size: 15px"><span style="color: #94A3A6; font-weight: 600; letter-spacing: 1px">LEGAL</span><a href="#terms" style="color: #DCDCD6">Terms of use</a><a href="#privacy" style="color: #DCDCD6">Privacy policy</a><a href="#faq" style="color: #DCDCD6">FAQ</a><a href="#fund-houses" style="color: #DCDCD6">Fund houses we distribute</a><a href="#commission" style="color: #DCDCD6">Commission disclosure</a><a href="#grievance" style="color: #DCDCD6">Grievance redressal</a></nav>
+</div>
+<div style="border-top: 1px solid #1C2A2D; padding-top: 28px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.7; color: #94A3A6">
+<p style="margin: 0">Mutual fund distribution is offered through Agreesha Wealth Finserv LLP, AMFI-registered Mutual Fund Distributor, ARN-271476. Mutual fund investments are subject to market risks, read all scheme related documents carefully. Regular plans involve payment of commission to mutual fund distributors. Mutual fund distribution does not include investment advice.</p>
+<p style="margin: 0">Top 20, SPX Top 20 and the Algo Desk are algo strategies that will be offered once our exchange empanelment as an algo provider [and SEBI Research Analyst registration, Reg. No.] is approved. Algo strategies are executed through a SEBI-registered stock broker. Capital raising is undertaken by [entity name]. These are not mutual fund products and are not covered by the ARN above.</p>
+<p style="margin: 0">Past performance does not guarantee future returns. Illustrations on this site are for illustrative purposes only and are not recommendations.</p>
+<p style="margin: 0">© 2026 PickMyFund. All rights reserved.</p>
+</div>
+</div>
+</footer>
+
+</div>
+<script>
+(function () {
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const GOLD = '#C9A44C', DOT = '#AEB9BA', GRID = '#6F7E80', CHIPF = '#1C2219', CHIPS = '#A0803E', CHIPT = '#DCDCD6';
+  const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const eo = x => 1 - Math.pow(1 - x, 3);
+  const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  const back = x => { const s = 1.7; x -= 1; return 1 + (s + 1) * x * x * x + s * x * x; };
+  const lerp = (a, b, k) => a + (b - a) * k;
+  function rng(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+
+  /* ---------- canvas helpers ---------- */
+  function setup(cv, w, h) {
+    const d = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = w * d; cv.height = h * d;
+    const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return c;
+  }
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h); }
+  function chip(c, cx, cy, w, h, k, label, fs) {
+    if (k <= 0.02) return;
+    const ww = lerp(6, w, k), hh = lerp(6, h, k);
+    c.globalAlpha = Math.min(1, k * 1.4);
+    rr(c, cx - ww / 2, cy - hh / 2, ww, hh, 4 + 6 * k); c.fillStyle = CHIPF; c.fill();
+    c.lineWidth = 1.6; c.strokeStyle = CHIPS; c.stroke();
+    if (label && k > .6) { c.globalAlpha = prog(k, .6, 1); c.fillStyle = CHIPT; c.font = `700 ${fs}px Inter, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(label, cx, cy + 1); }
+    c.globalAlpha = 1;
+  }
+  function dot(c, x, y, r, col, a) { c.globalAlpha = a; c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, 6.283); c.fill(); c.globalAlpha = 1; }
+
+  /* ---------- scene: screen → rank → chips (used by hero, Top 20, SPX, Select 5) ---------- */
+  function screenScene(opts) {
+    const R = rng(opts.seed);
+    const N = opts.cols * opts.rows;
+    const grid = [], noise = [], ph = [];
+    for (let i = 0; i < N; i++) {
+      grid.push([opts.gx + (i % opts.cols) * opts.gdx, opts.gy + Math.floor(i / opts.cols) * opts.gdy]);
+      noise.push([opts.nx[0] + R() * (opts.nx[1] - opts.nx[0]), opts.ny[0] + R() * (opts.ny[1] - opts.ny[0])]);
+      ph.push([R() * 6.28, .6 + R() * .8]);
+    }
+    const idx = [...Array(N).keys()].sort(() => R() - .5).slice(0, opts.chips.length);
+    const T = opts.cycle;
+    return function draw(c, t) {
+      const s = t % T;
+      const out = 1 - prog(s, T - .7, T);
+      c.clearRect(0, 0, opts.w, opts.h);
+      const kGrid = eio(prog(s, opts.tGrid, opts.tGrid + .9));
+      for (let i = 0; i < N; i++) {
+        const nx = noise[i][0] + 7 * Math.sin(t * 2.1 * ph[i][1] + ph[i][0]);
+        const ny = noise[i][1] + 7 * Math.cos(t * 1.7 * ph[i][1] + ph[i][0]);
+        let x = lerp(nx, grid[i][0], kGrid), y = lerp(ny, grid[i][1], kGrid);
+        const pick = idx.indexOf(i);
+        let col = kGrid > .5 ? GRID : DOT, a = .85 * out, r = opts.r;
+        if (pick >= 0 && s > opts.tPick) {
+          const t0 = opts.tPick + pick * opts.stagger;
+          const kh = eo(prog(s, t0, t0 + .25));
+          col = GOLD; r = opts.r + 1.6 * kh; a = out;
+          const kf = eio(prog(s, t0 + .25, t0 + .95));
+          if (opts.lines && kf > 0) {
+            c.globalAlpha = .55 * out; c.strokeStyle = GOLD; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x, y);
+            const [cx, cy] = opts.chips[pick];
+            const ex = lerp(x, cx - opts.cw / 2, kf), ey = lerp(y, cy, kf);
+            c.bezierCurveTo(lerp(x, ex, .5), y, lerp(x, ex, .5), ey, ex, ey); c.stroke(); c.globalAlpha = 1;
+            chip(c, cx, cy, opts.cw, opts.ch, back(prog(s, t0 + .75, t0 + 1.15)) * out, opts.label(pick), opts.fs);
+          } else if (!opts.lines) {
+            const [cx, cy] = opts.chips[pick];
+            x = lerp(x, cx, kf); y = lerp(y, cy, kf);
+            if (kf > .85) { chip(c, cx, cy, opts.cw, opts.ch, back(prog(s, t0 + .8, t0 + 1.15)) * out, opts.label(pick), opts.fs); continue; }
+          }
+        } else if (s > opts.tPick) a *= 1 - .55 * prog(s, opts.tPick, opts.tPick + .4);
+        dot(c, x, y, r, col, a);
+      }
+      if (opts.onPhase) opts.onPhase(s < opts.tGrid ? 0 : s < opts.tPick ? 1 : 2);
+    };
+  }
+
+  /* ---------- scene: algo desk ---------- */
+  function algoScene(w, h) {
+    const R = rng(21), NP = 90, base = h * .5, X0 = 6, X1 = w - 10;
+    const mk = x => x < .43 ? base - 34 * (x / .43) : x < .69 ? base - 34 + 78 * eio((x - .43) / .26) : base + 44 - 8 * ((x - .69) / .31);
+    const M = [], Hd = [], Nt = [];
+    for (let i = 0; i < NP; i++) { const x = i / (NP - 1); const m = mk(x) + (R() - .5) * 7; M.push(m); Hd.push(2 * base - m + (R() - .5) * 3); Nt.push(base - 30 * x + Math.sin(i * .7) * 1.5); }
+    const X = i => X0 + (X1 - X0) * i / (NP - 1);
+    function line(c, ys, f, col, lw, a, glow) {
+      const n = Math.floor(clamp(f) * (NP - 1)) + 1; if (n < 2 || a <= 0) return;
+      c.globalAlpha = a; c.strokeStyle = col; c.lineWidth = lw; c.lineJoin = 'round'; c.lineCap = 'round';
+      if (glow) { c.shadowColor = col; c.shadowBlur = 10; }
+      c.beginPath(); c.moveTo(X(0), ys[0]); for (let i = 1; i < n; i++) c.lineTo(X(i), ys[i]); c.stroke();
+      c.shadowBlur = 0; dot(c, X(n - 1), ys[n - 1], lw + 1.5, col, a); c.globalAlpha = 1;
+    }
+    return function draw(c, t) {
+      const T = 7.5, s = t % T, out = 1 - prog(s, T - .6, T);
+      c.clearRect(0, 0, w, h);
+      c.fillStyle = 'rgba(143,163,166,.28)'; for (let x = X0; x < X1; x += 9) c.fillRect(x, base, 1.5, 1.5);
+      const neutral = s > 2.6;
+      line(c, M, prog(s, .1, 2.3), neutral ? '#6F7E80' : '#FAFAF7', neutral ? 2 : 2.6, out);
+      if (neutral) { const f = prog(s, 2.8, 5.0); line(c, Hd, f, GOLD, 2, .9 * out); line(c, Nt, f, '#FAFAF7', 3.6, out, true); }
+    };
+  }
+
+  /* ---------- registry + loop ---------- */
+  const scenes = [];
+  function register(cv, w, h, draw) {
+    cv.style.width = '100%'; cv.style.height = 'auto'; cv.style.aspectRatio = `${w} / ${h}`; cv.style.display = 'block';
+    const c = setup(cv, w, h); const sc = { cv, c, draw, vis: false, t0: performance.now() };
+    scenes.push(sc);
+    new IntersectionObserver(es => es.forEach(e => { sc.vis = e.isIntersecting; if (e.isIntersecting && !sc.started) { sc.started = true; sc.t0 = performance.now(); } }), { threshold: .2 }).observe(cv);
+    if (RM) draw(c, 99999.4); // static final-ish frame
+  }
+  function loop(now) {
+    if (!RM) for (const s of scenes) if (s.vis) s.draw(s.c, (now - s.t0) / 1000);
+    requestAnimationFrame(loop);
+  }
+
+  /* hero: one field of dots across the whole hero */
+  const heroCv = document.getElementById('heroCanvas'), heroSec = document.getElementById('top'), stage = document.getElementById('heroStage');
+  const labels = [...document.querySelectorAll('[data-phase]')];
+  if (heroCv) {
+    const R = rng(7), N = 170, COLS = 8, ROWS = 7, G = COLS * ROWS;
+    const P = []; for (let i = 0; i < N; i++) P.push({ u: R(), v: R(), a: R() * 6.28, sp: .5 + R() * .9, r: 1.6 + R() * 1.6 });
+    const picks = [9, 30, 45];   // grid slots that become signals
+    let W = 0, H = 0, c = null, geo = null, t0 = performance.now(), vis = true;
+    const layout = () => {
+      const r = heroSec.getBoundingClientRect(), q = stage.getBoundingClientRect();
+      W = r.width; H = r.height; c = setup(heroCv, W, H); heroCv.style.width = W + 'px'; heroCv.style.height = H + 'px';
+      const sx = q.left - r.left, sy = q.top - r.top, sw = q.width, sh = q.height;
+      const gx0 = sx + sw * .06, gx1 = sx + sw * .56, gy0 = sy + sh * .16, gy1 = sy + sh * .84;
+      const grid = []; for (let k = 0; k < G; k++) grid.push([lerp(gx0, gx1, (k % COLS) / (COLS - 1)), lerp(gy0, gy1, Math.floor(k / COLS) / (ROWS - 1))]);
+      const chips = [.25, .5, .75].map(f => [sx + sw * .86, sy + sh * f]);
+      geo = { sx, grid, chips, cw: Math.min(96, sw * .2), ch: 40 };
+    };
+    layout(); addEventListener('resize', layout);
+    new IntersectionObserver(es => es.forEach(e => vis = e.isIntersecting)).observe(heroSec);
+    const T = 9;
+    const draw = now => {
+      const t = (now - t0) / 1000, s = RM ? 5 : t % T;
+      c.clearRect(0, 0, W, H);
+      const kIn = eio(prog(s, 1.8, 3.0)), kOut = eio(prog(s, 8.0, 9.0)), k = kIn * (1 - kOut);
+      const phase = s < 1.8 || s > 8.2 ? 0 : s < 3.4 ? 1 : 2;
+      labels.forEach(l => l.classList.toggle('on', +l.dataset.phase === phase));
+      for (let i = 0; i < N; i++) {
+        const p = P[i];
+        const nx = p.u * W + 14 * Math.sin(t * .9 * p.sp + p.a), ny = p.v * H + 14 * Math.cos(t * .7 * p.sp + p.a);
+        let x = nx, y = ny, a, col = DOT, r = p.r;
+        const textSide = Math.min(1, Math.max(0, (nx - (geo.sx - 120)) / 160));   // dim behind the copy
+        if (i < G) {
+          const st = (i % COLS) * .04 + Math.floor(i / COLS) * .03;
+          const kk = eio(clamp((k * 1.2) - st));
+          x = lerp(nx, geo.grid[i][0], kk); y = lerp(ny, geo.grid[i][1], kk); r = lerp(p.r, 2.6, kk);
+          a = lerp(.18 + .5 * textSide, .75, kk); if (kk > .5) col = GRID;
+          const pi = picks.indexOf(i);
+          if (pi >= 0 && s > 3.4 && s < 8.2) {
+            const t1 = 3.4 + pi * .45, kh = eo(prog(s, t1, t1 + .3));
+            col = GOLD; r = 2.6 + 2 * kh; a = 1;
+            const kl = eio(prog(s, t1 + .3, t1 + 1.0)) * (1 - prog(s, 7.6, 8.2));
+            const [cx, cy] = geo.chips[pi];
+            if (kl > 0) {
+              const ex = lerp(x, cx - geo.cw / 2, kl), ey = lerp(y, cy, kl);
+              c.globalAlpha = .6 * (1 - prog(s, 7.6, 8.2)); c.strokeStyle = GOLD; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x, y);
+              c.bezierCurveTo(lerp(x, ex, .5), y, lerp(x, ex, .5), ey, ex, ey); c.stroke(); c.globalAlpha = 1;
+            }
+            chip(c, cx, cy, geo.cw, geo.ch, back(prog(s, t1 + .8, t1 + 1.2)) * (1 - prog(s, 7.6, 8.2)), '#' + (pi + 1), 16);
+          } else if (s > 3.4 && s < 8.4 && kk > .5) a *= 1 - .5 * prog(s, 3.4, 3.9) * (1 - prog(s, 7.8, 8.4));
+        } else {
+          a = (.12 + .38 * textSide) * (1 - .55 * k);   // ambient dust stays in the field
+        }
+        dot(c, x, y, r, col, a);
+      }
+    };
+    const heroLoop = now => { if (vis || RM) draw(now); if (!RM) requestAnimationFrame(heroLoop); };
+    requestAnimationFrame(heroLoop);
+  }
+  /* engines */
+  document.querySelectorAll('canvas[data-kind]').forEach(cv => {
+    const k = cv.dataset.kind, w = 440, h = 120;
+    if (k === 'top20' || k === 'spx') {
+      const chips = []; for (let i = 0; i < 12; i++) chips.push([216 + (i % 4) * 60, 26 + Math.floor(i / 4) * 36]);
+      register(cv, w, h, screenScene({ seed: k === 'top20' ? 3 : 11, w, h, cols: 8, rows: 4, gx: 12, gy: 22, gdx: 18, gdy: 25, nx: [6, 170], ny: [8, 112], r: 2.6,
+        chips, cw: 52, ch: 28, fs: 12, lines: false, label: i => '#' + (i + 1), tGrid: 1.0, tPick: 2.1, stagger: .09, cycle: 7 }));
+    } else if (k === 'select5') {
+      const chips = []; for (let i = 0; i < 5; i++) chips.push([208 + i * 51, 60]);
+      register(cv, w, h, screenScene({ seed: 5, w, h, cols: 7, rows: 5, gx: 14, gy: 16, gdx: 18, gdy: 22, nx: [6, 160], ny: [8, 112], r: 2.6,
+        chips, cw: 44, ch: 48, fs: 16, lines: false, label: i => String(i + 1), tGrid: 1.0, tPick: 2.1, stagger: .16, cycle: 7 }));
+    } else if (k === 'algo') register(cv, w, h, algoScene(w, h));
+  });
+  requestAnimationFrame(loop);
+
+  /* ---------- hero headline ---------- */
+  const h1 = document.querySelector('h1');
+  if (h1 && !RM) {
+    let i = 0;
+    h1.querySelectorAll('*').forEach(() => {});
+    const wrap = node => {
+      [...node.childNodes].forEach(n => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(p => {
+            if (!p) return;
+            if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+            const s = document.createElement('span'); s.className = 'w'; s.style.animationDelay = (0.15 + i++ * 0.09) + 's'; s.textContent = p; frag.appendChild(s);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1 && n.tagName !== 'BR') wrap(n);
+      });
+    };
+    wrap(h1);
+    const g = h1.querySelector('span[style*="C9A44C"]'); if (g) g.classList.add('uline');
+  }
+
+  /* ---------- scroll reveals ---------- */
+  const revealSel = ['section h2', 'section > div > p', '#engines article', '#help article', '#capital article', '#team article', 'figure', 'ol li', '#diff-h + div > div', '#insights a[href^="#a"]', '#talk > div', '.swipe'];
+  const els = new Set(); revealSel.forEach(s => document.querySelectorAll(s).forEach(e => els.add(e)));
+  els.forEach(e => { if (!e.closest('header')) e.classList.add('rv'); });
+  document.querySelectorAll('#engines article, #help article, #capital article, #team article, ol li, #insights a[href^="#a"], #diff-h + div > div').forEach(e => {
+    const sibs = [...e.parentElement.children].filter(x => x.classList.contains('rv')); e.style.transitionDelay = (sibs.indexOf(e) * 0.1) + 's';
+  });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); onReveal(e.target); } }), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.rv').forEach(e => RM ? (e.classList.add('in'), onReveal(e)) : io.observe(e));
+
+  /* ---------- count-ups ---------- */
+  function onReveal(el) {
+    el.querySelectorAll && el.querySelectorAll('[data-to]').forEach(n => {
+      const to = +n.dataset.to, pre = n.dataset.pre || '', suf = n.dataset.suf || '';
+      if (RM) { n.textContent = pre + to + suf; return; }
+      const t0 = performance.now(), D = 1600;
+      const step = now => { const k = eo(clamp((now - t0) / D)); n.textContent = pre + Math.round(to * k) + suf; if (k < 1) requestAnimationFrame(step); else n.classList.add('landed'); };
+      requestAnimationFrame(step);
+    });
+  }
+
+  document.querySelectorAll('.aum').forEach(a => setTimeout(() => onReveal(a), RM ? 0 : 1300));
+
+  /* ---------- value statement: words light up with scroll ---------- */
+  const vs = document.getElementById('valueStatement');
+  if (vs && !RM) {
+    const words = [];
+    const wrapW = node => [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) { const f = document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(p => { if (!p) return; if (/^\s+$/.test(p)) f.appendChild(document.createTextNode(p)); else { const s = document.createElement('span'); s.className = 'vw'; s.textContent = p; words.push(s); f.appendChild(s); } }); n.replaceWith(f); }
+      else if (n.nodeType === 1) wrapW(n);
+    });
+    wrapW(vs);
+    const upd = () => { const r = vs.getBoundingClientRect(), vh = innerHeight; const p = clamp((vh * .85 - r.top) / (r.height + vh * .35)); const lit = Math.floor(p * words.length * 1.15); words.forEach((w, i) => w.classList.toggle('lit', i < lit)); };
+    addEventListener('scroll', upd, { passive: true }); upd();
+  }
+
+  /* ---------- card spotlight + nav ---------- */
+  document.querySelectorAll('#engines article, #help article, #capital article, #insights a[href^="#a"]').forEach(a => {
+    a.classList.add('glow');
+    a.addEventListener('pointermove', e => { const r = a.getBoundingClientRect(); a.style.setProperty('--mx', (e.clientX - r.left) + 'px'); a.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+  });
+  document.querySelectorAll('a').forEach(a => { if ((a.getAttribute('style') || '').includes('background: #C9A44C')) a.classList.add('shine'); });
+  const hdr = document.querySelector('header');
+  addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 30), { passive: true });
+})();
+
+</script>
+</body>
+</html>

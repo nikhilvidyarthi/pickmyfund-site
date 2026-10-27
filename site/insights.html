@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PickMyFund Market Insights</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: a single reading column of data blocks on deep pine; tables scroll inside their own boxes on phones */
+:root{
+  --bg:#0A1517; --band:#0C1A1C; --card:#0F1F22; --line:#1F3033; --fg:#FAFAF7; --muted:#B7C2C3; --dim:#94A3A6;
+  --gold:#C9A44C; --gold-soft:#E6C77A; --ink:#0A1517;
+  --up:#4FB59A; --up-bg:rgba(79,181,154,.16); --down:#E0796B; --down-bg:rgba(224,121,107,.16);
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:var(--gold);text-decoration:none} a:hover{color:var(--gold-soft)}
+.in{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:tabular-nums}
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(10,21,23,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+header .in{display:flex;align-items:center;gap:24px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:12px;color:var(--fg)}
+.logo b{font-size:21px;font-weight:700;letter-spacing:-.3px}
+.logo small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.navl{display:flex;gap:26px;flex:1;justify-content:center;font-size:15px;font-weight:500}
+.navl a{color:#C9CFCF}.navl a[aria-current]{color:var(--gold)}
+.btn{display:inline-block;background:var(--gold);color:var(--ink);font-weight:700;font-size:15px;padding:12px 20px;border-radius:999px;white-space:nowrap}
+.btn:hover{color:var(--ink);filter:brightness(1.06)}
+/* hero */
+.hero{padding-block:64px 28px}
+.eyebrow{font-size:13px;letter-spacing:3px;font-weight:600;color:var(--gold)}
+h1{margin:14px 0 14px;font-size:clamp(34px,5vw,60px);line-height:1.04;font-weight:800;letter-spacing:-1.5px;text-wrap:balance;max-width:960px}
+h1 .g{color:var(--gold)}
+.sub{margin:0;color:var(--muted);font-size:17px;line-height:1.6;max-width:680px}
+.asof{display:inline-flex;gap:8px;align-items:center;margin-top:18px;font-size:13px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.asof i{width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block}
+/* ticker */
+.ticker{border-block:1px solid var(--line);background:var(--band);overflow:hidden}
+.track{display:flex;gap:40px;padding:16px 0;width:max-content;animation:tick 60s linear infinite}
+.ticker:hover .track{animation-play-state:paused}
+.tk{display:flex;gap:10px;align-items:baseline;font-size:15px;white-space:nowrap}
+.tk span:first-child{color:var(--muted);font-weight:500}
+.tk b{font-weight:700}
+@keyframes tick{to{transform:translateX(-50%)}}
+/* sections */
+section.blk{padding-block:72px 8px}
+.blk h2{margin:0 0 8px;font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.8px;text-wrap:balance}
+.blk .lead{margin:0 0 28px;color:var(--muted);font-size:16px;line-height:1.6;max-width:720px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px}
+/* questions */
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.q{padding:26px;display:flex;flex-direction:column;gap:12px}
+.q .qq{font-size:15px;color:var(--muted);font-weight:500}
+.q .qa{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.q .qd{font-size:14px;color:var(--dim);line-height:1.55}
+.chip{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 10px;border-radius:999px}
+.chip.up{background:var(--up-bg);color:var(--up)} .chip.down{background:var(--down-bg);color:var(--down)} .chip.mid{background:rgba(201,164,76,.16);color:var(--gold)}
+/* tables */
+.tbox{overflow-x:auto;border:1px solid var(--line);border-radius:20px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:760px}
+th{font-size:12px;letter-spacing:1.5px;color:var(--dim);font-weight:600;text-align:right;padding:14px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--card);position:sticky;top:0}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1}
+td{padding:12px 14px;text-align:right;border-top:1px solid #172629;white-space:nowrap}
+td.name{font-weight:600}
+td .sm{display:block;font-size:12px;color:var(--dim);font-weight:500}
+.pos{color:var(--up)} .neg{color:var(--down)}
+.heat{border-radius:8px;padding:5px 8px;display:inline-block;min-width:64px;font-weight:600}
+.trend{font-size:12px;font-weight:700;letter-spacing:.5px;padding:4px 9px;border-radius:999px}
+th.sort{cursor:pointer;user-select:none} th.sort:hover{color:var(--fg)} th.sort[aria-sort]{color:var(--gold)}
+/* sector quadrant */
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.qc{padding:22px;min-height:150px}
+.qc h3{margin:0 0 4px;font-size:16px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.qc p{margin:0 0 14px;color:var(--dim);font-size:13px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:14px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:6px 12px;background:#132629}
+/* breadth */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.bc{padding:26px;display:flex;flex-direction:column;gap:14px}
+.bc .k{font-size:14px;color:var(--muted);font-weight:500}
+.bc .v{font-size:38px;font-weight:800;letter-spacing:-1px}
+.bar{height:12px;border-radius:999px;background:#1B2E31;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.legend{display:flex;justify-content:space-between;font-size:13px;color:var(--dim)}
+/* movers */
+.mv{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.mv .card{padding:22px}
+.mv h3{margin:0 0 12px;font-size:16px}
+.mrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #172629;font-size:15px}
+.mrow:first-of-type{border-top:0}
+.mrow .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.mrow .nm small{display:block;color:var(--dim);font-size:12px}
+/* assets */
+.ag{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.ac{padding:22px;display:flex;flex-direction:column;gap:6px}
+.ac .k{color:var(--muted);font-size:14px;font-weight:500}
+.ac .v{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.ac .r{display:flex;gap:12px;font-size:13px;color:var(--dim)}
+/* note + footer */
+.note{font-size:13px;color:var(--dim);line-height:1.6;margin-top:14px}
+.cta{margin-block:88px 0;background:var(--gold);color:var(--ink);border-radius:28px;padding:44px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.cta h2{margin:0;font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-.8px;max-width:620px}
+.cta form{display:flex;gap:10px;flex-wrap:wrap}
+.cta input{background:#FAFAF7;border:0;border-radius:999px;padding:14px 18px;font:500 15px var(--sans);min-width:0;width:240px;color:var(--ink)}
+.cta button{background:var(--ink);color:var(--fg);border:0;border-radius:999px;padding:14px 22px;font:700 15px var(--sans);cursor:pointer}
+.cta .ok{flex-basis:100%;font-size:14px;font-weight:600}
+footer{margin-top:80px;border-top:1px solid var(--line);background:#071012}
+footer .in{padding-block:40px 48px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--dim);line-height:1.7}
+footer p{margin:0}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* reveal */
+.rv{opacity:1;transform:none;transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .rv.pre{opacity:0;transform:translateY(24px)}
+@media (max-width:760px){.navl,.hide-m{display:none!important}.quad{grid-template-columns:1fr}.cta{padding:28px}.cta input{width:100%}}
+@media (prefers-reduced-motion:reduce){.track{animation:none}.rv,.js .rv.pre{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body style="margin:0">
+<header><div class="in">
+<a class="logo" href="index.html" aria-label="PickMyFund home">
+<svg width="32" height="32" viewBox="0 0 132 132" aria-hidden="true"><path d="M14 22 C14 12 22 6 31 11 L110 55 C119 60 119 72 110 77 L31 121 C22 126 14 120 14 110 Z" fill="none" stroke="#C9A44C" stroke-width="9" stroke-linejoin="round"></path><rect x="27" y="74" width="12" height="18" rx="2" fill="#C9A44C"></rect><rect x="45" y="61" width="12" height="31" rx="2" fill="#C9A44C"></rect><rect x="63" y="48" width="12" height="44" rx="2" fill="#C9A44C"></rect></svg>
+<span><b>pick<span style="color:var(--gold)">my</span>fund</b><small>AMFI-registered Mutual Fund Distributor</small></span>
+</a>
+<nav class="navl" aria-label="Main"><a href="index.html#engines">Our engines</a><a href="index.html#help">How we help</a><a href="index.html#capital">Capital raising</a><a href="index.html#team">Our team</a><a href="#top" aria-current="page">Insights</a></nav>
+<a class="btn hide-m" href="index.html#talk">Check my portfolio</a>
+</div></header>
+
+<main id="top">
+<div class="in hero">
+<div class="eyebrow">MARKET INSIGHTS</div>
+<h1 id="headline">Indian markets, at the close.</h1>
+<p class="sub">Indices, sectors, breadth and the long view, in one place. The same rules-first lens we use for our own work, written plainly. Refreshed every hour while the market is open.</p>
+<div class="asof"><i aria-hidden="true"></i><span id="asof">End-of-day data</span></div>
+</div>
+
+<div class="ticker" aria-label="Market snapshot"><div class="track num" id="ticker"></div></div>
+
+<div class="in">
+<section class="blk rv" aria-labelledby="q-h">
+<h2 id="q-h">The questions people ask</h2>
+<p class="lead">Straight answers from the data, using simple rules that don't change with the mood of the day.</p>
+<div class="qs" id="questions"></div>
+</section>
+
+<section class="blk rv" aria-labelledby="b-h">
+<h2 id="b-h">How did the broad market do?</h2>
+<p class="lead">Price returns for the main indices. 3Y and 5Y are annualised. The trend tag shows whether the index is above its 200-day average.</p>
+<div class="tbox"><table class="num" id="broad"></table></div>
+</section>
+
+<section class="blk rv" aria-labelledby="s-h">
+<h2 id="s-h">Which sectors lead?</h2>
+<p class="lead">Tap a column to sort. Colours run from the weakest to the strongest return in each column.</p>
+<div class="tbox"><table class="num" id="sectors"></table></div>
+</section>
+
+<section class="blk rv" aria-labelledby="l-h">
+<h2 id="l-h">Is leadership changing?</h2>
+<p class="lead">Each sector against the Nifty 500: three-month strength on one axis, the last month's direction on the other.</p>
+<div class="quad" id="quad"></div>
+</section>
+
+<section class="blk rv" aria-labelledby="br-h">
+<h2 id="br-h">How broad is the move?</h2>
+<p class="lead">Across the Nifty 500: how many stocks rose, and how many sit above their key averages.</p>
+<div class="bgrid" id="breadth"></div>
+</section>
+
+<section class="blk rv" aria-labelledby="m-h">
+<h2 id="m-h">Biggest moves in the Nifty 50 today</h2>
+<p class="lead">Shown for context only. These are not recommendations to buy or sell.</p>
+<div class="mv" id="movers"></div>
+</section>
+
+<section class="blk rv" aria-labelledby="y-h">
+<h2 id="y-h">How have the years gone?</h2>
+<p class="lead">Calendar-year returns across Indian equity, gold and US equity in rupees. The gold outline marks each year's winner. The last row is each year's worst fall in the Nifty 50 from its high.</p>
+<div class="tbox"><table class="num" id="years"></table></div>
+</section>
+
+<section class="blk rv" aria-labelledby="a-h">
+<h2 id="a-h">Beyond Indian equity</h2>
+<p class="lead">Gold, silver, the rupee, bond yields and US markets.</p>
+<div class="ag" id="assets"></div>
+</section>
+
+<div class="cta rv">
+<h2>Get the weekly note: what changed in the market, in five minutes.</h2>
+<form id="nl"><label for="nl-email" class="sr" style="position:absolute;left:-9999px">Email</label><input id="nl-email" type="email" required placeholder="you@email.com"><button type="submit">Subscribe</button><span class="ok" id="nl-ok" hidden>Thanks. You're on the list.</span></form>
+</div>
+</div>
+</main>
+
+<footer><div class="in">
+<p>Data: Yahoo Finance, may be delayed. Price returns, dividends not included; 3Y and 5Y figures are annualised. Gold is the international price converted to rupees. The 10-year yield is the last traded yield of the benchmark bond on CCIL NDS-OM. Figures are for information only and are not investment advice or a recommendation to buy or sell any security. Past performance does not guarantee future returns.</p>
+<p>Mutual fund distribution is offered through Agreesha Wealth Finserv LLP, AMFI-registered Mutual Fund Distributor, ARN-271476. Mutual fund investments are subject to market risks, read all scheme related documents carefully.</p>
+<p>© 2026 PickMyFund</p>
+</div></footer>
+
+<script>
+function render(DATA){
+document.documentElement.classList.add('js');
+const D=DATA, $=id=>document.getElementById(id);
+const f=(v,d=2)=>v==null||isNaN(v)?'–':(v>0?'+':'')+v.toFixed(d)+'%';
+const n=(v,d=2)=>v==null?'–':Number(v).toLocaleString('en-IN',{maximumFractionDigits:d,minimumFractionDigits:d});
+const cls=v=>v==null?'':v>0?'pos':v<0?'neg':'';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function heat(v,lo,hi){ if(v==null)return 'background:transparent';
+  const t=v>=0? Math.min(1,v/Math.max(hi,1e-6)) : Math.min(1,v/Math.min(lo,-1e-6));
+  const a=(.12+.5*t).toFixed(2); return v>=0?`background:rgba(79,181,154,${a})`:`background:rgba(224,121,107,${a})`; }
+
+/* headline + as-of */
+const nifty=D.indices.find(x=>/Nifty 50$/.test(x.name)), small=D.indices.find(x=>/Smallcap 100/i.test(x.name));
+if(nifty){ const dir=v=>v>0?'rose':v<0?'fell':'was flat';
+  const dv=D.live?(v=>v>0?'is up':v<0?'is down':'is flat'):dir, dv2=D.live?(v=>v>0?'are up':v<0?'are down':'are flat'):dir;
+  let h=`The Nifty 50 ${dv(nifty.d1)} <span class="g">${Math.abs(nifty.d1).toFixed(2)}%</span>`;
+  if(small&&small.d1!=null) h+=`; small caps ${dv2(small.d1)} <span class="g">${Math.abs(small.d1).toFixed(2)}%</span>.`; else h+='.';
+  $('headline').innerHTML=h; }
+const dt=new Date(D.as_of+'T00:00:00');
+const ds=dt.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+$('asof').textContent=D.live?`Updated ${D.snap_ist}, ${ds} · market open, refreshed hourly`:'Closing data for '+ds;
+
+/* ticker */
+const tk=[...D.indices.filter(x=>['Nifty 50','Sensex','Nifty Bank','Nifty Midcap 100','Nifty Smallcap 100'].includes(x.name)),...D.assets];
+const tkHtml=tk.map(x=>`<div class="tk"><span>${esc(x.name)}</span><b>${n(x.close, x.close>1000?0:2)}${x.unit||''}</b><span class="${cls(x.d1)}">${x.pp!=null?(x.pp>0?'+':'')+x.pp.toFixed(2)+' pp':f(x.d1)}</span></div>`).join('');
+$('ticker').innerHTML=tkHtml+tkHtml;
+
+/* questions */
+const b=D.breadth||{}, vix=D.assets.find(x=>/VIX/.test(x.name)), n500=D.indices.find(x=>/Nifty 500/.test(x.name));
+const secs=[...D.sectors].filter(s=>s.m3!=null).sort((a,c)=>c.m3-a.m3);
+const Q=[];
+if(n500){ const up=n500.a200, br=b.p200;
+  Q.push({q:'Is the market in an uptrend?', a: up? 'Yes, broadly':'Not right now', chip: up?['up','ABOVE 200-DAY']:['down','BELOW 200-DAY'],
+    d:`The Nifty 500 is ${up?'above':'below'} its 200-day average${br!=null?`, and ${br.toFixed(0)}% of its stocks are above theirs`:''}. It is ${Math.abs(n500.offHigh).toFixed(1)}% below its 52-week high.`}); }
+if(vix){ const hi=vix.close>18, lo=vix.close<13;
+  Q.push({q:'How nervous is the market?', a: hi?'Elevated':lo?'Calm':'Normal', chip: hi?['down','INDIA VIX '+vix.close.toFixed(1)]:lo?['up','INDIA VIX '+vix.close.toFixed(1)]:['mid','INDIA VIX '+vix.close.toFixed(1)],
+    d:`India VIX measures expected 30-day swings in the Nifty. Below about 13 is calm, above about 18 is nervous. It moved ${f(vix.m1,1)} in the last month.`}); }
+if(nifty&&small&&small.m3!=null){ const gap=small.m3-nifty.m3;
+  Q.push({q:'Are small caps leading?', a: gap>1?'Yes':gap<-1?'No, large caps lead':'About level', chip: gap>1?['up','SMALL CAPS AHEAD']:gap<-1?['down','LARGE CAPS AHEAD']:['mid','LEVEL'],
+    d:`Over three months the Smallcap 100 returned ${f(small.m3,1)} against ${f(nifty.m3,1)} for the Nifty 50.`}); }
+if(secs.length){ const t=secs[0], w=secs[secs.length-1];
+  Q.push({q:'Where is the strength?', a:t.name, chip:['up','TOP 3-MONTH SECTOR'], d:`${t.name} leads over three months at ${f(t.m3,1)}. ${w.name} trails at ${f(w.m3,1)}.`}); }
+$('questions').innerHTML=Q.map(x=>`<article class="card q"><div class="qq">${esc(x.q)}</div><div class="qa">${esc(x.a)}</div><span class="chip ${x.chip[0]}">${esc(x.chip[1])}</span><div class="qd">${esc(x.d)}</div></article>`).join('');
+
+/* broad table */
+const bc=[['d1','1D'],['w1','1W'],['m1','1M'],['m3','3M'],['m6','6M'],['ytd','YTD'],['y1','1Y'],['y3','3Y p.a.'],['y5','5Y p.a.']];
+function ranges(rows,cols){const r={};cols.forEach(([k])=>{const v=rows.map(x=>x[k]).filter(x=>x!=null);r[k]=[Math.min(...v,0),Math.max(...v,0)]});return r}
+const br_=ranges(D.indices,bc);
+$('broad').innerHTML=`<thead><tr><th scope="col">INDEX</th><th scope="col">CLOSE</th>${bc.map(c=>`<th scope="col">${c[1]}</th>`).join('')}<th scope="col">FROM HIGH</th><th scope="col">TREND</th></tr></thead><tbody>`+
+D.indices.map(x=>`<tr><td class="name">${esc(x.name)}</td><td>${n(x.close,0)}</td>${bc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...br_[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
+
+/* sectors (sortable) */
+const sc=[['w1','1W'],['m1','1M'],['m3','3M'],['m6','6M'],['ytd','YTD'],['y1','1Y']];
+let sortKey='m3',dirDesc=true;
+function drawSectors(){ const rows=[...D.sectors].sort((a,c)=>((c[sortKey]??-1e9)-(a[sortKey]??-1e9))*(dirDesc?1:-1)); const rg=ranges(rows,sc);
+  $('sectors').innerHTML=`<thead><tr><th scope="col">SECTOR</th>${sc.map(([k,l])=>`<th scope="col" class="sort" tabindex="0" data-k="${k}" ${k===sortKey?`aria-sort="${dirDesc?'descending':'ascending'}"`:''}>${l}${k===sortKey?(dirDesc?' ↓':' ↑'):''}</th>`).join('')}<th scope="col">FROM HIGH</th><th scope="col">TREND</th></tr></thead><tbody>`+
+  rows.map(x=>`<tr><td class="name">${esc(x.name)}</td>${sc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...rg[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
+  $('sectors').querySelectorAll('th.sort').forEach(th=>{const go=()=>{const k=th.dataset.k; if(k===sortKey)dirDesc=!dirDesc; else{sortKey=k;dirDesc=true} drawSectors()}; th.onclick=go; th.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}});
+}
+drawSectors();
+
+/* leadership quadrant vs Nifty 500 */
+if(n500){ const g={Leading:[],Weakening:[],Improving:[],Lagging:[]};
+  D.sectors.forEach(s=>{ if(s.m3==null||s.m1==null)return; const rs=s.m3-n500.m3, mom=s.m1-n500.m1;
+    g[rs>=0?(mom>=0?'Leading':'Weakening'):(mom>=0?'Improving':'Lagging')].push(s.name)});
+  const meta={Leading:['up','Stronger over 3 months and still gaining'],Improving:['mid','Weaker over 3 months but gaining lately'],Weakening:['mid','Stronger over 3 months but slipping lately'],Lagging:['down','Weaker over 3 months and still slipping']};
+  $('quad').innerHTML=['Leading','Improving','Weakening','Lagging'].map(k=>`<div class="card qc"><h3>${k}<span class="chip ${meta[k][0]}">${g[k].length}</span></h3><p>${meta[k][1]}</p><div class="tags">${g[k].map(s=>`<span class="tag">${esc(s)}</span>`).join('')||'<span class="tag" style="color:var(--dim)">None today</span>'}</div></div>`).join(''); }
+
+/* breadth */
+if(b && b.total){ const adv=b.adv||0, dec=b.dec||0, un=b.unch||0, tot=adv+dec+un||1;
+  $('breadth').innerHTML=
+  `<div class="card bc"><div class="k">Advancing vs declining</div><div class="v num"><span class="pos">${adv}</span> <span style="color:var(--dim);font-size:24px">/</span> <span class="neg">${dec}</span></div><div class="bar" role="img" aria-label="${adv} advancing, ${dec} declining, ${un} unchanged"><i style="width:${adv/tot*100}%;background:var(--up)"></i><i style="width:${un/tot*100}%;background:#3A4A4D"></i><i style="width:${dec/tot*100}%;background:var(--down)"></i></div><div class="legend"><span>Up</span><span>${un} unchanged</span><span>Down</span></div></div>`+
+  [['Above 50-day average',b.p50],['Above 200-day average',b.p200]].map(([k,v])=>`<div class="card bc"><div class="k">${k}</div><div class="v num">${v==null?'–':v.toFixed(0)+'%'}</div><div class="bar" role="img" aria-label="${k}: ${v==null?'not available':v.toFixed(0)+' percent'}"><i style="width:${v||0}%;background:var(--gold)"></i></div><div class="legend"><span>0%</span><span>of ${b.total} stocks</span><span>100%</span></div></div>`).join('')+
+  `<div class="card bc"><div class="k">Near 52-week highs / lows</div><div class="v num"><span class="pos">${b.nh??'–'}</span> <span style="color:var(--dim);font-size:24px">/</span> <span class="neg">${b.nl??'–'}</span></div><div class="legend"><span>Within 1% of high</span><span>Within 1% of low</span></div></div>`;
+} else $('breadth').innerHTML='<p class="note">Breadth data is not available for this date.</p>';
+
+/* movers */
+const mvRow=x=>`<div class="mrow"><span class="nm">${esc(x.sym)}<small>${esc(x.name||'')}</small></span><span class="num" style="text-align:right">${n(x.close)}<small class="${cls(x.chg)}" style="display:block;font-size:13px;font-weight:600">${f(x.chg)}</small></span></div>`;
+if(D.movers&&D.movers.up&&D.movers.up.length) $('movers').innerHTML=`<div class="card"><h3 class="pos">Top gainers</h3>${D.movers.up.map(mvRow).join('')}</div><div class="card"><h3 class="neg">Top losers</h3>${D.movers.down.map(mvRow).join('')}</div>`;
+else $('movers').closest('section').hidden=true;
+
+/* calendar years */
+const Y=D.years;
+if(Y&&Y.years&&Y.series){ const all=Y.series.flatMap(s=>s.vals).filter(v=>v!=null), lo=Math.min(...all), hi=Math.max(...all);
+  const win=Y.years.map((_,i)=>{let bi=-1,bv=-1e9;Y.series.forEach((s,j)=>{if(s.vals[i]!=null&&s.vals[i]>bv){bv=s.vals[i];bi=j}});return bi});
+  $('years').innerHTML=`<thead><tr><th scope="col">ASSET</th>${Y.years.map(y=>`<th scope="col">${esc(y)}</th>`).join('')}</tr></thead><tbody>`+
+   Y.series.map((s,j)=>`<tr><td class="name">${esc(s.name)}${s.note?`<span class="sm">${esc(s.note)}</span>`:''}</td>${s.vals.map((v,i)=>`<td><span class="heat" style="${heat(v,lo,hi)};${win[i]===j?'outline:2px solid var(--gold);outline-offset:-2px':''}">${f(v,1)}</span></td>`).join('')}</tr>`).join('')+
+   (Y.dd?`<tr><td class="name">Nifty 50 worst fall<span class="sm">from high, within the year</span></td>${Y.dd.map(v=>`<td class="neg">${v==null?'–':v.toFixed(1)+'%'}</td>`).join('')}</tr>`:'')+'</tbody>';
+} else $('years').closest('section').hidden=true;
+
+/* assets */
+const ppf=v=>v==null?'–':(v>0?'+':'')+v.toFixed(2)+' pp';
+$('assets').innerHTML=D.assets.map(x=>{const y=x.unit==='%';
+  const r=y?`<span class="${cls(x.pp)}">1D ${ppf(x.pp)}</span><span class="${cls(x.m1pp)}">1M ${ppf(x.m1pp)}</span><span class="${cls(x.y1pp)}">1Y ${ppf(x.y1pp)}</span>`
+           :`<span class="${cls(x.d1)}">1D ${f(x.d1,1)}</span><span class="${cls(x.m1)}">1M ${f(x.m1,1)}</span><span class="${cls(x.y1)}">1Y ${f(x.y1,1)}</span>`;
+  return `<article class="card ac"><div class="k">${esc(x.name)}</div><div class="v num">${n(x.close, y?2:(x.close>1000?0:2))}${x.unit||''}</div><div class="r num">${r}</div>${x.note?`<div class="r" style="font-size:12px">${esc(x.note)}</div>`:''}</article>`}).join('');
+
+/* newsletter (no backend yet) */
+$('nl').addEventListener('submit',e=>{e.preventDefault();$('nl-ok').hidden=false;e.target.querySelector('input').value=''});
+
+/* reveal */
+const els=document.querySelectorAll('.rv');
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window){
+  els.forEach(el=>{const r=el.getBoundingClientRect(); if(r.top>innerHeight) el.classList.add('pre')});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -60px 0px'});
+  els.forEach(el=>io.observe(el));
+}
+}
+function load(){
+  fetch('data.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
+  .then(render).catch(()=>{document.getElementById('asof').textContent='Market data could not be loaded. Please refresh the page.'});
+}
+load(); setInterval(load,15*60*1000);
+</script>
+</body>
+</html>
