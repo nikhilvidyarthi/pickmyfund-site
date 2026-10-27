@@ -30,7 +30,7 @@ SECTORS = [
     ("Capital Markets", "NIFTY_CAPITAL_MKT.NS"), ("India Digital", "NIFTY_IND_DIGITAL.NS"), ("India Manufacturing", "NIFTY_INDIA_MFG.NS"),
 ]
 ASSETS = [  # name, symbol, unit
-    ("Gold (₹/10g)", "GOLD_INR", ""), ("Silver ($/oz)", "SI=F", ""), ("USD/INR", "INR=X", ""),
+    ("Gold ($/oz)", "GC=F", ""), ("Silver ($/oz)", "SI=F", ""), ("USD/INR", "INR=X", ""),
     ("S&P 500", "^GSPC", ""), ("Nasdaq 100", "^NDX", ""), ("India VIX", "^INDIAVIX", ""),
 ]
 YEAR_SERIES = {"Nifty 50": "^NSEI", "Nifty Midcap 100": "NIFTY_MIDCAP_100.NS", "Nifty Smallcap 100": "^CNXSC",
@@ -115,39 +115,65 @@ def fetch_ccil_10y(today):
             if loc.count():
                 loc.click(); break
         pg.wait_for_selector("table.dataTable tbody tr", timeout=30000)
-        pg.wait_for_timeout(1500)
-        heads = pg.eval_on_selector_all("table.dataTable thead th", "els => els.map(e => e.innerText.trim())")
-        rows = pg.eval_on_selector_all("table.dataTable tbody tr", "trs => trs.map(r => Array.from(r.querySelectorAll('td')).map(td => td.innerText.trim()))")
+        pg.wait_for_timeout(2500)
+        tables = pg.evaluate("""() => Array.from(document.querySelectorAll('table.dataTable')).map(t => {
+            const heads = Array.from(t.querySelectorAll('thead th')).map(e => e.textContent.trim());
+            let rows = [];
+            try { if (window.jQuery && jQuery.fn.dataTable && jQuery.fn.dataTable.isDataTable(t)) {
+                rows = jQuery(t).DataTable().rows().data().toArray().map(r => (Array.isArray(r) ? r : Object.values(r))
+                       .map(v => String(v).replace(/<[^>]*>/g, '').trim())); } } catch (e) {}
+            if (!rows.length) rows = Array.from(t.querySelectorAll('tbody tr')).map(r => Array.from(r.querySelectorAll('td')).map(td => td.textContent.trim()));
+            return {heads, rows};
+        })""")
         b.close()
+    candidates = []
+    for t in tables:
+        y = _pick_benchmark(t["heads"], t["rows"], today)
+        if y: candidates.append(y)
+    if not candidates:
+        sample = [t["rows"][:2] for t in tables][:3]
+        raise RuntimeError(f"no 10-year GS bond found; tables={len(tables)}, rows={[len(t['rows']) for t in tables]}, sample={sample}")
+    best = max(candidates, key=lambda x: x[3])
+    return best[0], best[1], best[2]
+
+
+def _parse_date(x):
+    for fmt in ("%d/%m/%Y", "%d-%m-%Y", "%d-%b-%Y", "%d %b %Y", "%Y-%m-%d", "%d/%m/%y"):
+        try:
+            return dt.datetime.strptime(x.strip(), fmt).date()
+        except Exception:
+            pass
+    return None
+
+
+def _pick_benchmark(heads, rows, today):
     h = [x.lower() for x in heads]
-    def col(*keys, default=None):
+    def col(*keys):
         for i, x in enumerate(h):
             if all(k in x for k in keys):
                 return i
-        return default
-    # default positions match the layout seen in Oct 2026: security, maturity, bid qty, bid yield, bid price,
-    # offer price, offer yield, offer qty, LTP, LTY, last trade qty, total traded volume
-    i_sec = col("desc") if col("desc") is not None else col("security", default=0)
-    i_mat = col("matur", default=1)
-    i_lty = col("lty") if col("lty") is not None else col("last", "yield", default=9)
-    i_vol = col("total", default=11) if col("total") is not None else col("volume", default=11)
+        return None
+    i_sec = col("security") if col("security") is not None else 0
+    i_mat = col("matur") if col("matur") is not None else 1
+    i_lty = col("lty") if col("lty") is not None else 9
+    i_vol = col("tta") if col("tta") is not None else (col("total") if col("total") is not None else 11)
     best = None
     for r in rows:
         if len(r) <= max(i_sec, i_mat, i_lty, i_vol):
             continue
-        try:
-            mat = dt.datetime.strptime(r[i_mat], "%d/%m/%Y").date()
-        except Exception:
+        sec = r[i_sec]
+        if " GS " not in f" {sec} ":          # central government dated securities only (not SDLs or T-bills)
+            continue
+        mat = _parse_date(r[i_mat])
+        if not mat:
             continue
         yrs = (mat - today).days / 365.25
         y, v = _num(r[i_lty]), _num(r[i_vol])
         if not (8.5 <= yrs <= 11) or not y or not v or not (2 < y < 15):
             continue
         if best is None or v > best[3]:
-            best = (y, r[i_sec], str(mat), v)
-    if not best:
-        raise RuntimeError(f"no 10-year benchmark found among {len(rows)} rows (headers: {heads})")
-    return best[0], best[1], best[2]
+            best = (y, sec, str(mat), v)
+    return best
 
 
 def bond_card(prev, now, log):
@@ -183,6 +209,60 @@ def bond_card(prev, now, log):
     return card, hist, meta
 
 
+# ---------- Fallback for NSE indices that Yahoo doesn't carry: official history from niftyindices.com ----------
+NSE_NAMES = {
+    "Nifty Midcap 100": "NIFTY MIDCAP 100", "Nifty Smallcap 100": "NIFTY SMALLCAP 100", "Nifty Midcap 150": "NIFTY MIDCAP 150",
+    "Nifty Smallcap 250": "NIFTY SMALLCAP 250", "Nifty Next 50": "NIFTY NEXT 50", "Nifty 500": "NIFTY 500",
+    "Private Banks": "NIFTY PRIVATE BANK", "Media": "NIFTY MEDIA", "Defence": "NIFTY INDIA DEFENCE", "Commodities": "NIFTY COMMODITIES",
+    "Healthcare": "NIFTY HEALTHCARE INDEX", "Oil & Gas": "NIFTY OIL & GAS", "Consumer Durables": "NIFTY CONSUMER DURABLES",
+    "Capital Markets": "NIFTY CAPITAL MARKETS", "India Digital": "NIFTY INDIA DIGITAL", "India Manufacturing": "NIFTY INDIA MANUFACTURING",
+    "IT": "NIFTY IT", "Pharma": "NIFTY PHARMA", "Auto": "NIFTY AUTO", "FMCG": "NIFTY FMCG", "Metal": "NIFTY METAL", "Realty": "NIFTY REALTY",
+    "Energy": "NIFTY ENERGY", "PSU Banks": "NIFTY PSU BANK", "Financial Services": "NIFTY FINANCIAL SERVICES", "Infrastructure": "NIFTY INFRASTRUCTURE",
+    "PSE": "NIFTY PSE", "Consumption": "NIFTY INDIA CONSUMPTION",
+}
+_NSE_SESSION = None
+
+def nse_history(index_name, years=6):
+    """Daily closes and highs for an NSE index from niftyindices.com (official NSE Indices site)."""
+    import requests
+    global _NSE_SESSION
+    if _NSE_SESSION is None:
+        _NSE_SESSION = requests.Session()
+        _NSE_SESSION.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36",
+                                     "Content-Type": "application/json; charset=UTF-8", "Accept": "application/json, text/javascript, */*; q=0.01",
+                                     "X-Requested-With": "XMLHttpRequest", "Origin": "https://www.niftyindices.com",
+                                     "Referer": "https://www.niftyindices.com/reports/historical-data"})
+        try:
+            _NSE_SESSION.get("https://www.niftyindices.com/reports/historical-data", timeout=20)
+        except Exception:
+            pass
+    end = dt.date.today(); frames = []
+    # the endpoint returns at most about a year per request, so walk back year by year
+    for k in range(years):
+        e = end - dt.timedelta(days=365 * k); st = e - dt.timedelta(days=364)
+        cinfo = "{'name':'%s','startDate':'%s','endDate':'%s','indexName':'%s'}" % (
+            index_name, st.strftime("%d-%b-%Y"), e.strftime("%d-%b-%Y"), index_name)
+        r = _NSE_SESSION.post("https://www.niftyindices.com/Backpage.aspx/getHistoricaldatatabletoString",
+                              data=json.dumps({"cinfo": cinfo}), timeout=30)
+        r.raise_for_status()
+        rows = json.loads(r.json()["d"])
+        if not rows:
+            break
+        frames.append(pd.DataFrame(rows))
+    if not frames:
+        raise RuntimeError("no rows")
+    df = pd.concat(frames)
+    cols = {c.upper(): c for c in df.columns}
+    dcol = next(cols[c] for c in cols if "DATE" in c)
+    ccol = next(cols[c] for c in cols if c == "CLOSE" or c.endswith("CLOSE"))
+    hcol = next((cols[c] for c in cols if c == "HIGH" or c.endswith("HIGH")), ccol)
+    idx = pd.to_datetime(df[dcol], dayfirst=True, errors="coerce")
+    c = pd.Series(pd.to_numeric(df[ccol].astype(str).str.replace(",", ""), errors="coerce").values, index=idx).dropna()
+    h = pd.Series(pd.to_numeric(df[hcol].astype(str).str.replace(",", ""), errors="coerce").values, index=idx).dropna()
+    c = c[~c.index.duplicated()].sort_index(); h = h[~h.index.duplicated()].sort_index()
+    return c, h
+
+
 def main():
     prev = json.loads(OUT.read_text()) if OUT.exists() else {}
     log = []
@@ -198,16 +278,26 @@ def main():
     if ser.get("^GSPC") is not None and inr is not None:
         ser["SPX_INR"] = (ser["^GSPC"] * inr.reindex(ser["^GSPC"].index, method="ffill")).dropna()
 
+    sources = {}
+
     def build(lst, key, full):
         old = {x["name"]: x for x in prev.get(key, [])}
         out = []
         for name, s in lst:
-            c = ser.get(s)
+            c, h = ser.get(s), highs(df, s)
+            stale = c is not None and len(c) > 30 and ser.get("^NSEI") is not None and c.index[-1] < ser["^NSEI"].index[-1]
+            if (c is None or len(c) < 30 or stale) and name in NSE_NAMES:
+                try:
+                    c, h = nse_history(NSE_NAMES[name], 6 if full else 2)
+                    sources[name] = "niftyindices"
+                except Exception as e:
+                    log.append(f"{key}: {name} not on Yahoo and niftyindices failed ({e})")
+                    c = None
             if c is None or len(c) < 30:
                 log.append(f"{key}: {name} ({s}) unavailable, kept previous")
                 if name in old: out.append(old[name])
                 continue
-            out.append({"name": name, **metrics(c, highs(df, s), full)})
+            out.append({"name": name, **metrics(c, h, full)})
         return out
 
     data = {"indices": build(INDICES, "indices", True), "sectors": build(SECTORS, "sectors", False)}
@@ -275,6 +365,22 @@ def main():
             labels.append(f"{cur} YTD")
             for sr in years["series"]: sr["vals"].append(None)
             years["dd"].append(None)
+        # gold and S&P 500 in rupees: rebuild every year from one source so the row is consistent
+        for sr in years["series"]:
+            src = YEAR_SERIES.get(sr["name"], "")
+            if src in ("GOLD_INR", "SPX_INR"):
+                try:
+                    lng = yf.download(["GC=F", "^GSPC", "INR=X"], period="12y", interval="1mo", group_by="ticker", auto_adjust=False, progress=False)
+                    fx = closes(lng, "INR=X"); base = closes(lng, "GC=F" if src == "GOLD_INR" else "^GSPC")
+                    v = (base * fx.reindex(base.index, method="ffill")).dropna()
+                    ye = v.groupby(v.index.year).last()
+                    for i, lab in enumerate(labels):
+                        yv = int(lab[:4])
+                        if yv in ye.index and (yv - 1) in ye.index:
+                            sr["vals"][i] = r2((ye[yv] / ye[yv - 1] - 1) * 100)
+                    sr["note"] = "international price, in ₹" if src == "GOLD_INR" else "in ₹"
+                except Exception as e:
+                    log.append(f"years: {sr['name']} rebuild failed ({e})")
         for sr in years["series"]:
             c = ser.get(YEAR_SERIES.get(sr["name"], ""))
             if c is not None and len(c) > 30:
@@ -294,6 +400,8 @@ def main():
     data.update({"as_of": str(last), "live": bool(open_now),
                  "snap_ist": now.strftime("%-I:%M %p IST").lower().replace(" ist", " IST") if open_now else "close",
                  "source": "Yahoo Finance via yfinance (may be delayed)"})
+    if sources:
+        log.append("from niftyindices.com: " + ", ".join(sorted(sources)))
     data["warnings"] = log
     order = ["as_of", "live", "snap_ist", "source", "warnings", "indices", "sectors", "assets", "years", "breadth", "movers", "bond_meta", "bond_hist"]
     OUT.write_text(json.dumps({k: data.get(k) for k in order}, ensure_ascii=False, indent=1))
