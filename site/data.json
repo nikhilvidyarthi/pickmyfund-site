@@ -27,9 +27,7 @@
   "sectors: India Digital not on Yahoo and niftyindices failed (unexpected reply 200 text/html; charset=utf-8: ' <!DOCTYPE html> <html> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0\" /> <meta http-e')",
   "sectors: India Digital (NIFTY_IND_DIGITAL.NS) unavailable, kept previous",
   "sectors: India Manufacturing not on Yahoo and niftyindices failed (unexpected reply 200 text/html; charset=utf-8: ' <!DOCTYPE html> <html> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0\" /> <meta http-e')",
-  "sectors: India Manufacturing (NIFTY_INDIA_MFG.NS) unavailable, kept previous",
-  "assets: S&P 500 unavailable, kept previous",
-  "10Y yield: CCIL fetch failed (no 10-year GS bond found; tables=7, rows=[1, 1, 1, 1, 1, 1, 1], sample=[[['No data available in table']], [['No data available in table']], [['No data available in table']]]); kept previous"
+  "sectors: India Manufacturing (NIFTY_INDIA_MFG.NS) unavailable, kept previous"
  ],
  "indices": [
   {
@@ -491,22 +489,22 @@
   {
    "name": "Gold ($/oz)",
    "unit": "",
-   "close": 4063.0,
-   "d1": -0.28,
-   "w1": -2.1,
-   "m1": -2.53,
-   "ytd": -6.41,
-   "y1": 2.01
+   "close": 4060.3,
+   "d1": -0.35,
+   "w1": -2.16,
+   "m1": -2.59,
+   "ytd": -6.47,
+   "y1": 1.94
   },
   {
    "name": "Silver ($/oz)",
    "unit": "",
-   "close": 53.77,
-   "d1": -0.96,
-   "w1": -6.36,
-   "m1": -12.17,
-   "ytd": -23.33,
-   "y1": 14.1
+   "close": 53.78,
+   "d1": -0.94,
+   "w1": -6.34,
+   "m1": -12.15,
+   "ytd": -23.32,
+   "y1": 14.12
   },
   {
    "name": "USD/INR",
@@ -521,15 +519,15 @@
   {
    "name": "India 10Y G-sec yield",
    "unit": "%",
-   "close": 7.436,
-   "pp": -0.05,
+   "close": 7.439,
+   "pp": -0.04,
    "m1pp": 0.3,
    "ytdpp": 0.83,
    "y1pp": 0.89,
    "d1": null,
    "m1": null,
    "y1": null,
-   "note": "06.94 GS 2036 · CCIL NDS-OM 3:00 pm"
+   "note": "06.94 GS 2036 · CCIL NDS-OM 4:22 pm"
   },
   {
    "name": "S&P 500",
@@ -642,7 +640,7 @@
      12.85,
      31.77,
      73.45,
-     -0.72
+     -0.79
     ]
    },
    {
@@ -659,7 +657,7 @@
      23.57,
      28.53,
      21.79,
-     19.66
+     19.62
     ]
    }
   ],
@@ -756,7 +754,7 @@
  "bond_meta": {
   "security": "06.94 GS 2036",
   "maturity": "2036-05-11",
-  "time": "3:00 pm",
+  "time": "4:22 pm",
   "source": "CCIL NDS-OM"
  },
  "bond_hist": {
@@ -765,7 +763,7 @@
   "2026-09-27": 7.136,
   "2026-10-26": 7.486,
   "2026-10-27": 7.4827,
-  "2026-10-28": 7.4362
+  "2026-10-28": 7.4392
  },
  "hist": {
   "Nifty 50": {
@@ -10153,7 +10151,7 @@
     4007.9,
     4038.4,
     4074.6,
-    4063.0
+    4060.3
    ]
   },
   "S&P 500": {
