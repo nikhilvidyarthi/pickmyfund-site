@@ -521,7 +521,7 @@ def main():
                  "snap_ist": now.strftime("%-I:%M %p IST").lower().replace(" ist", " IST") if open_now else "close",
                  "source": "Yahoo Finance via yfinance (may be delayed)"})
     if sources:
-        log.append("from niftyindices.com: " + ", ".join(sorted(sources)))
+        log.append("from NSE's daily index file (not on Yahoo): " + ", ".join(sorted(sources)))
     data["hist"] = hist
     data["warnings"] = log
     order = ["as_of", "live", "snap_ist", "source", "warnings", "indices", "sectors", "assets", "years", "breadth", "movers", "bond_meta", "bond_hist", "hist"]
