@@ -1,7 +1,8 @@
 """Refresh site/data.json for the PickMyFund Insights page.
 
 Runs hourly from GitHub Actions during NSE hours (see .github/workflows/update-data.yml).
-Source: Yahoo Finance via the yfinance library (free, unofficial, may be delayed).
+Sources: Yahoo Finance via yfinance; NSE's daily index file (data/nse_index_eod.csv) for indices Yahoo lacks;
+TradingView's public scanner for live Nifty Midcap 100 / Smallcap 100.
 Anything that can't be fetched keeps its previous value from site/data.json, so a
 partial outage never blanks the page.
 """
@@ -293,6 +294,74 @@ def nse_history(index_name, years=6):
     return c, h
 
 
+# ---------- NSE's own end-of-day file: closes for every NSE index, kept in data/nse_index_eod.csv ----------
+EOD_FILE = ROOT / "data" / "nse_index_eod.csv"
+EOD_URL = "https://nsearchives.nseindia.com/content/indices/ind_close_all_{:%d%m%Y}.csv"
+_EOD = None
+
+def eod_store(log):
+    """Load the stored daily closes and add any sessions published since the last stored date."""
+    global _EOD
+    if _EOD is not None:
+        return _EOD
+    import csv, io, requests
+    want = {v.upper() for v in NSE_NAMES.values()}
+    df = pd.read_csv(EOD_FILE, parse_dates=["date"]) if EOD_FILE.exists() else pd.DataFrame(columns=["date", "index", "close", "high"])
+    last = df["date"].max().date() if len(df) else dt.date.today() - dt.timedelta(days=30)
+    today = dt.datetime.now(IST).date()
+    new, d, tried = [], last + dt.timedelta(days=1), 0
+    while d <= today and tried < 20:
+        if d.weekday() < 5:
+            tried += 1
+            try:
+                r = requests.get(EOD_URL.format(d), headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"}, timeout=30)
+                if r.status_code == 200 and r.text.startswith("Index Name"):
+                    for row in csv.DictReader(io.StringIO(r.text)):
+                        n = (row.get("Index Name") or "").strip().upper()
+                        if n in want:
+                            try:
+                                c = float(row["Closing Index Value"]); h = float(row.get("High Index Value") or c)
+                            except Exception:
+                                continue
+                            new.append({"date": pd.Timestamp(d), "index": n, "close": c, "high": h})
+                elif r.status_code != 404 and d < today:
+                    log.append(f"NSE daily file {d}: reply {r.status_code}")
+            except Exception as e:
+                log.append(f"NSE daily file {d}: {e}")
+        d += dt.timedelta(days=1)
+    if new:
+        df = pd.concat([df, pd.DataFrame(new)]).drop_duplicates(["date", "index"], keep="last").sort_values(["index", "date"])
+        out = df.copy(); out["date"] = out["date"].dt.strftime("%Y-%m-%d")
+        out.to_csv(EOD_FILE, index=False, float_format="%.2f")
+    _EOD = df
+    return df
+
+
+def eod_series(name, log):
+    df = eod_store(log)
+    sub = df[df["index"] == NSE_NAMES[name].upper()]
+    if len(sub) < 30:
+        return None, None
+    c = pd.Series(sub["close"].astype(float).values, index=pd.to_datetime(sub["date"])).sort_index()
+    h = pd.Series(sub["high"].astype(float).values, index=pd.to_datetime(sub["date"])).sort_index()
+    return c, h
+
+
+# Live intraday level for the two broad indices Yahoo lacks (TradingView's public scanner)
+TV_LIVE = {"Nifty Midcap 100": "NSE:CNXMIDCAP", "Nifty Smallcap 100": "NSE:CNXSMALLCAP"}
+
+def tv_live(log):
+    import requests
+    try:
+        r = requests.post("https://scanner.tradingview.com/india/scan", timeout=20,
+                          json={"symbols": {"tickers": list(TV_LIVE.values())}, "columns": ["close", "high"]})
+        got = {x["s"]: x["d"] for x in r.json().get("data", [])}
+        return {n: got[s] for n, s in TV_LIVE.items() if s in got and got[s][0]}
+    except Exception as e:
+        log.append(f"TradingView live quotes: {e}")
+        return {}
+
+
 def main():
     prev = json.loads(OUT.read_text()) if OUT.exists() else {}
     log = []
@@ -309,6 +378,7 @@ def main():
         ser["SPX_INR"] = (ser["^GSPC"] * inr.reindex(ser["^GSPC"].index, method="ffill")).dropna()
 
     sources = {}
+    live = tv_live(log)
     hist = dict(prev.get("hist") or {})
 
     def build(lst, key, full):
@@ -318,18 +388,28 @@ def main():
             c, h = ser.get(s), highs(df, s)
             stale = c is not None and len(c) > 30 and ser.get("^NSEI") is not None and c.index[-1] < ser["^NSEI"].index[-1]
             yahoo_ok = ser.get("^NSEI") is not None
-            if yahoo_ok and (c is None or len(c) < 30 or stale) and name in NSE_NAMES:
-                try:
-                    c, h = nse_history(NSE_NAMES[name], 6 if full else 2)
-                    sources[name] = "niftyindices"
-                except Exception as e:
-                    log.append(f"{key}: {name} not on Yahoo and niftyindices failed ({e})")
-                    c = None
+            eod_flag = None
+            if (c is None or len(c) < 30 or stale) and name in NSE_NAMES:
+                c, h = eod_series(name, log)
+                if c is not None:
+                    sources[name] = "NSE daily file"
+                    today = pd.Timestamp(now.date())
+                    if name in live and c.index[-1] < today and now.weekday() < 5 and now.hour >= 9:
+                        c = pd.concat([c, pd.Series([float(live[name][0])], index=[today])])
+                        h = pd.concat([h, pd.Series([float(live[name][1] or live[name][0])], index=[today])])
+                        sources[name] = "NSE daily file + TradingView live"
+                    ref = ser["^NSEI"].index[-1] if ser.get("^NSEI") is not None else today
+                    if c.index[-1] < ref:
+                        eod_flag = c.index[-1].strftime("%-d %b")
+                else:
+                    log.append(f"{key}: {name} missing from the NSE daily file store")
             if c is None or len(c) < 30:
                 log.append(f"{key}: {name} ({s}) unavailable, kept previous")
                 if name in old: out.append(old[name])
                 continue
-            out.append({"name": name, **metrics(c, h, full)})
+            row = {"name": name, **metrics(c, h, full)}
+            if eod_flag: row["asof"] = eod_flag
+            out.append(row)
             if key == "indices":
                 hist[name] = thin(c[c.index > c.index[-1] - pd.DateOffset(years=5, days=7)])
         return out

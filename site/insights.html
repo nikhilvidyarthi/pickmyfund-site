@@ -296,7 +296,7 @@ const bc=[['d1','1D'],['w1','1W'],['m1','1M'],['m3','3M'],['m6','6M'],['ytd','YT
 function ranges(rows,cols){const r={};cols.forEach(([k])=>{const v=rows.map(x=>x[k]).filter(x=>x!=null);r[k]=[Math.min(...v,0),Math.max(...v,0)]});return r}
 const br_=ranges(D.indices,bc);
 $('broad').innerHTML=`<thead><tr><th scope="col">INDEX</th><th scope="col">CLOSE</th>${bc.map(c=>`<th scope="col">${c[1]}</th>`).join('')}<th scope="col">FROM HIGH</th><th scope="col">TREND</th></tr></thead><tbody>`+
-D.indices.map(x=>`<tr><td class="name">${esc(x.name)}</td><td>${n(x.close,0)}</td>${bc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...br_[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
+D.indices.map(x=>`<tr><td class="name">${esc(x.name)}${x.asof?`<span class="sm">close of ${esc(x.asof)}</span>`:''}</td><td>${n(x.close,0)}</td>${bc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...br_[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
 
 
 /* ---------- charts ---------- */
@@ -365,7 +365,7 @@ const sc=[['w1','1W'],['m1','1M'],['m3','3M'],['m6','6M'],['ytd','YTD'],['y1','1
 let sortKey='m3',dirDesc=true;
 function drawSectors(){ const rows=[...D.sectors].sort((a,c)=>((c[sortKey]??-1e9)-(a[sortKey]??-1e9))*(dirDesc?1:-1)); const rg=ranges(rows,sc);
   $('sectors').innerHTML=`<thead><tr><th scope="col">SECTOR</th>${sc.map(([k,l])=>`<th scope="col" class="sort" tabindex="0" data-k="${k}" ${k===sortKey?`aria-sort="${dirDesc?'descending':'ascending'}"`:''}>${l}${k===sortKey?(dirDesc?' ↓':' ↑'):''}</th>`).join('')}<th scope="col">FROM HIGH</th><th scope="col">TREND</th></tr></thead><tbody>`+
-  rows.map(x=>`<tr><td class="name">${esc(x.name)}</td>${sc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...rg[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
+  rows.map(x=>`<tr><td class="name">${esc(x.name)}${x.asof?`<span class="sm">close of ${esc(x.asof)}</span>`:''}</td>${sc.map(([k])=>`<td><span class="heat" style="${heat(x[k],...rg[k])}">${f(x[k],1)}</span></td>`).join('')}<td class="${cls(x.offHigh)}">${f(x.offHigh,1)}</td><td>${x.a200==null?'–':x.a200?'<span class="trend chip up">UP</span>':'<span class="trend chip down">DOWN</span>'}</td></tr>`).join('')+'</tbody>';
   $('sectors').querySelectorAll('th.sort').forEach(th=>{const go=()=>{const k=th.dataset.k; if(k===sortKey)dirDesc=!dirDesc; else{sortKey=k;dirDesc=true} drawSectors()}; th.onclick=go; th.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}});
 }
 drawSectors();
