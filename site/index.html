@@ -322,9 +322,9 @@ a{transition:color .2s}
 <div style="max-width: 1240px; margin: 0 auto; padding: 110px 32px">
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 44px"><h2 id="ins-h" style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -1px">Insights</h2><a href="insights.html" style="font-weight: 600; font-size: 16px">Market insights →</a></div>
 <div style="display: flex; flex-wrap: wrap; gap: 24px">
-<a href="#a1" style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">METHOD</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">Why we run one test, every Friday</span><span style="font-size: 15px; color: #94A3A6">[Read time]</span></a>
-<a href="#a2" style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">ALGO DESK</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">Market-neutral, explained simply</span><span style="font-size: 15px; color: #94A3A6">[Read time]</span></a>
-<a href="#a3" style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">MUTUAL FUNDS</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">How Select 5 lets gold, silver and offshore compete</span><span style="font-size: 15px; color: #94A3A6">[Read time]</span></a>
+<a href="articles/one-test.html" data-art style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">METHOD</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">Why we run one test, every Friday</span><span style="font-size: 15px; color: #94A3A6">3 min read</span></a>
+<a href="articles/market-neutral.html" data-art style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">ALGO DESK</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">Market-neutral, explained simply</span><span style="font-size: 15px; color: #94A3A6">2 min read</span></a>
+<a href="articles/select-5.html" data-art style="flex: 1 1 340px; background: #0F1F22; border: 1px solid #1F3033; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 14px; color: #FAFAF7"><span style="font-size: 13px; letter-spacing: 2px; color: #C9A44C; font-weight: 600">MUTUAL FUNDS</span><span style="font-size: 22px; font-weight: 700; line-height: 1.35">How Select 5 lets gold, silver and offshore compete</span><span style="font-size: 15px; color: #94A3A6">3 min read</span></a>
 </div>
 </div>
 </section>
@@ -592,10 +592,10 @@ a{transition:color .2s}
   }
 
   /* ---------- scroll reveals ---------- */
-  const revealSel = ['section h2', 'section > div > p', '#engines article', '#help article', '#capital article', '#team article', 'figure', 'ol li', '#diff-h + div > div', '#insights a[href^="#a"]', '#talk > div', '.swipe'];
+  const revealSel = ['section h2', 'section > div > p', '#engines article', '#help article', '#capital article', '#team article', 'figure', 'ol li', '#diff-h + div > div', '#insights a[data-art]', '#talk > div', '.swipe'];
   const els = new Set(); revealSel.forEach(s => document.querySelectorAll(s).forEach(e => els.add(e)));
   els.forEach(e => { if (!e.closest('header')) e.classList.add('rv'); });
-  document.querySelectorAll('#engines article, #help article, #capital article, #team article, ol li, #insights a[href^="#a"], #diff-h + div > div').forEach(e => {
+  document.querySelectorAll('#engines article, #help article, #capital article, #team article, ol li, #insights a[data-art], #diff-h + div > div').forEach(e => {
     const sibs = [...e.parentElement.children].filter(x => x.classList.contains('rv')); e.style.transitionDelay = (sibs.indexOf(e) * 0.1) + 's';
   });
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); onReveal(e.target); } }), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
@@ -628,7 +628,7 @@ a{transition:color .2s}
   }
 
   /* ---------- card spotlight + nav ---------- */
-  document.querySelectorAll('#engines article, #help article, #capital article, #insights a[href^="#a"]').forEach(a => {
+  document.querySelectorAll('#engines article, #help article, #capital article, #insights a[data-art]').forEach(a => {
     a.classList.add('glow');
     a.addEventListener('pointermove', e => { const r = a.getBoundingClientRect(); a.style.setProperty('--mx', (e.clientX - r.left) + 'px'); a.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
   });

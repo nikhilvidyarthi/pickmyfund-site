@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Market-neutral, explained simply · PickMyFund</title>
+<meta name="description" content="Most investing works only if the market goes up. A market-neutral strategy tries to make the market’s direction matter much less.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A1517;--card:#0F1F22;--line:#1F3033;--fg:#FAFAF7;--muted:#B7C2C3;--dim:#94A3A6;--gold:#C9A44C;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+.bar{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,21,23,.92);backdrop-filter:blur(8px);z-index:5}
+.bar .in{max-width:1180px;margin:0 auto;padding:14px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-weight:800;font-size:20px;color:var(--fg);letter-spacing:-.3px} .logo b{color:var(--gold);font-weight:800}
+.bar nav{display:flex;gap:18px;font-size:15px;font-weight:500} .bar nav a{color:var(--muted)}
+main{max-width:720px;margin:0 auto;padding:64px max(16px,env(safe-area-inset-left,0px)) 40px}
+.eb{font-size:13px;letter-spacing:3px;color:var(--gold);font-weight:600}
+h1{margin:14px 0 18px;font-size:clamp(34px,5.2vw,52px);line-height:1.08;font-weight:800;letter-spacing:-1.2px;text-wrap:balance}
+.lede{margin:0;font-size:20px;line-height:1.6;color:var(--muted)}
+.meta{margin-top:20px;font-size:14px;color:var(--dim);display:flex;gap:14px;flex-wrap:wrap}
+.meta span{border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+article{margin-top:44px;padding-top:12px;border-top:1px solid var(--line)}
+article h2{margin:40px 0 12px;font-size:26px;font-weight:800;letter-spacing:-.5px}
+article p,article li{font-size:18px;line-height:1.75;color:#DCDCD6}
+article p{margin:0 0 16px}
+article ul{margin:0 0 16px;padding-left:22px} article li{margin-bottom:10px} article li::marker{color:var(--gold)}
+article b{color:var(--fg)}
+.note{margin-top:40px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:16px;padding:18px 20px;font-size:15px;line-height:1.6;color:var(--muted)}
+.cta{margin-top:40px;background:var(--gold);color:#0A1517;border-radius:24px;padding:28px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.cta b{font-size:22px;letter-spacing:-.3px} .cta a{background:#0A1517;color:var(--fg);font-weight:700;padding:14px 22px;border-radius:999px}
+.more{max-width:1180px;margin:0 auto;padding:40px max(16px,env(safe-area-inset-left,0px)) 64px}
+.more h3{font-size:14px;letter-spacing:2px;color:var(--dim);font-weight:600;margin:0 0 16px}
+.rels{display:flex;flex-wrap:wrap;gap:16px}
+.rel{flex:1 1 300px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:8px;color:var(--fg)}
+.rel span{font-size:12px;letter-spacing:2px;color:var(--gold);font-weight:600} .rel b{font-size:19px;line-height:1.35}
+.rel:hover{text-decoration:none;border-color:#3A4A4D}
+footer{border-top:1px solid var(--line);font-size:13px;line-height:1.65;color:var(--dim)}
+footer .in{max-width:1180px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left,0px)) 48px}
+footer p{margin:0 0 8px;max-width:900px}
+@media (max-width:560px){.bar nav a.h{display:none}.lede{font-size:18px}article p,article li{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="in"><a class="logo" href="../index.html">pick<b>my</b>fund</a><nav aria-label="Main"><a class="h" href="../index.html#engines">Our engines</a><a href="../index.html#insights">All insights</a><a href="../insights.html">Markets</a></nav></div></div>
+<main>
+<div class="eb">ALGO DESK</div>
+<h1>Market-neutral, explained simply</h1>
+<p class="lede">Most investing works only if the market goes up. A market-neutral strategy tries to make the market’s direction matter much less.</p>
+<div class="meta"><span>2 min read</span><span>PickMyFund</span></div>
+<article>
+
+<h2>Directional versus neutral</h2>
+<p>When you buy a stock or an equity fund, you are making a directional bet: if the market rises, you gain; if it falls, you lose. That is perfectly sensible for long-term money, but it means your result depends heavily on which way the market moves.</p>
+<p>A market-neutral position is built so that a rise or a fall in the market, on its own, has a smaller effect. The result comes from something else instead.</p>
+
+<h2>An everyday comparison</h2>
+<p>Think of a trader in a wholesale market who buys a crate in the morning and sells it the same afternoon. Whether prices are high or low that season matters less to them. What matters is the margin between buying and selling, and whether they can repeat it reliably.</p>
+<p>Market-neutral strategies look for that kind of margin in financial markets. Common sources include:</p>
+<ul>
+<li><b>Time decay in options,</b> where option prices lose value as expiry approaches.</li>
+<li><b>The gap between two related prices,</b> such as a futures contract and the same stock in the cash market.</li>
+<li><b>Pairs of positions that offset each other,</b> so that a move in one is largely cancelled by the other.</li>
+</ul>
+
+<h2>How our Algo Desk works</h2>
+<p>The desk runs in two sessions: NSE futures and options in the morning, and MCX commodities, crude oil and natural gas, in the evening. For every strategy, the hedge, the position size and the exit rules are defined before a trade is placed. Algorithms then execute those rules, so decisions are not made on feel in the middle of a fast market.</p>
+
+<h2>Neutral is not risk-free</h2>
+<p>A hedge reduces the effect of the market’s direction; it does not remove risk. Sudden gaps at the open, sharp jumps in volatility, thin trading and hedges that do not offset perfectly can all cause losses, sometimes large ones. Derivatives are leveraged, so gains and losses can both be bigger than the money put up.</p>
+<p>SEBI’s own study of the futures and options market found that about nine in ten individual traders lost money. That is why we build every strategy around risk limits first, and why this is not suitable for everyone.</p>
+
+<div class="note">The Algo Desk will open to clients once our algo vendor empanelment with the exchanges is approved. Strategies will be executed through a SEBI-registered stock broker. Futures and options trading carries a high level of risk.</div>
+</article>
+<div class="cta"><b>Questions about this?</b><a href="../index.html#talk">Talk to us</a></div>
+</main>
+<section class="more" aria-label="More insights"><h3>MORE INSIGHTS</h3><div class="rels"><a class="rel" href="one-test.html"><span>METHOD</span><b>Why we run one test, every Friday</b></a><a class="rel" href="select-5.html"><span>MUTUAL FUNDS</span><b>How Select 5 lets gold, silver and offshore compete</b></a></div></section>
+<footer><div class="in">
+<p>This article is for education and information only. It is not an offer, solicitation or recommendation to buy or sell any security, mutual fund or financial product. Past performance is not indicative of future results.</p>
+<p>PickMyFund · A platform of Agreesha Wealth Finserv LLP · AMFI-registered Mutual Fund Distributor · ARN 271476</p>
+</div></footer>
+</body>
+</html>
