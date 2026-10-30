@@ -39,6 +39,9 @@ article b{color:var(--fg)}
 .rel{flex:1 1 300px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:8px;color:var(--fg)}
 .rel span{font-size:12px;letter-spacing:2px;color:var(--gold);font-weight:600} .rel b{font-size:19px;line-height:1.35}
 .rel:hover{text-decoration:none;border-color:#3A4A4D}
+.fig{margin:36px 0 0}
+.fig .story{background:#0F1F22;border:1px solid var(--line);border-radius:24px;overflow:hidden}
+.fig figcaption{margin-top:10px;font-size:13px;line-height:1.5;color:var(--dim)}
 footer{border-top:1px solid var(--line);font-size:13px;line-height:1.65;color:var(--dim)}
 footer .in{max-width:1180px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left,0px)) 48px}
 footer p{margin:0 0 8px;max-width:900px}
@@ -51,7 +54,8 @@ footer p{margin:0 0 8px;max-width:900px}
 <div class="eb">ALGO DESK</div>
 <h1>Market-neutral, explained simply</h1>
 <p class="lede">Most investing works only if the market goes up. A market-neutral strategy tries to make the market’s direction matter much less.</p>
-<div class="meta"><span>2 min read</span><span>PickMyFund</span></div>
+<div class="meta"><span>3 min read</span><span>PickMyFund</span></div>
+<figure class="fig"><div class="story" data-anim="algo" role="img" aria-label="Capital moves into an arbitrage fund, its units are pledged as margin for the Algo Desk, and two layers of income build on the same capital"></div><figcaption>Illustration only, not actual returns: idle money earns an arbitrage return, and the same units back hedged algo strategies as margin.</figcaption></figure>
 <article>
 
 <h2>Directional versus neutral</h2>
@@ -70,6 +74,14 @@ footer p{margin:0 0 8px;max-width:900px}
 <h2>How our Algo Desk works</h2>
 <p>The desk runs in two sessions: NSE futures and options in the morning, and MCX commodities, crude oil and natural gas, in the evening. For every strategy, the hedge, the position size and the exit rules are defined before a trade is placed. Algorithms then execute those rules, so decisions are not made on feel in the middle of a fast market.</p>
 
+<h2>Arbitrage plus algo: a second income from the same money</h2>
+<p>Many businesses leave surplus cash in a current account or a liquid fund. We set it up in two layers instead.</p>
+<ul>
+<li><b>Layer 1: an arbitrage fund.</b> The money goes into an arbitrage fund, which buys shares in the cash market and sells the same shares in futures, locking in the small gap between the two prices. Because the two sides offset each other, the return depends little on whether the market rises or falls.</li>
+<li><b>Layer 2: the Algo Desk.</b> Units of the arbitrage fund can be pledged with the broker as margin, after a haircut. That margin backs hedged algo strategies, which aim to add a second stream of income on top of the arbitrage return.</li>
+</ul>
+<p>The same capital keeps earning its arbitrage return while it also supports the algo strategies. The second layer is where the risk sits: algo income varies from month to month and can be negative, and if losses run beyond the cash available, pledged units can be sold to cover them.</p>
+
 <h2>Neutral is not risk-free</h2>
 <p>A hedge reduces the effect of the market’s direction; it does not remove risk. Sudden gaps at the open, sharp jumps in volatility, thin trading and hedges that do not offset perfectly can all cause losses, sometimes large ones. Derivatives are leveraged, so gains and losses can both be bigger than the money put up.</p>
 <p>SEBI’s own study of the futures and options market found that about nine in ten individual traders lost money. That is why we build every strategy around risk limits first, and why this is not suitable for everyone.</p>
@@ -83,5 +95,6 @@ footer p{margin:0 0 8px;max-width:900px}
 <p>This article is for education and information only. It is not an offer, solicitation or recommendation to buy or sell any security, mutual fund or financial product. Past performance is not indicative of future results.</p>
 <p>PickMyFund · A platform of Agreesha Wealth Finserv LLP · AMFI-registered Mutual Fund Distributor · ARN 271476</p>
 </div></footer>
+<script src="../js/story.js" defer></script>
 </body>
 </html>
