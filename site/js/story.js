@@ -47,29 +47,38 @@
     }
   }
 
+
+  /* ---- dates: the latest Friday screen and the latest quarterly review, from today's date ---- */
+  const MON = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+  const NOW = new Date();
+  const FRI = (() => { const d = new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate()); d.setDate(d.getDate() - ((d.getDay() - 5 + 7) % 7)); return d; })();
+  const CAL = (() => { const y = FRI.getFullYear(), m = FRI.getMonth();
+    return { title: MON[m] + ' ' + y, off: (new Date(y, m, 1).getDay() + 6) % 7, days: new Date(y, m + 1, 0).getDate(), hit: FRI.getDate(),
+      chip: 'FRIDAY ' + FRI.getDate() + ' ' + MON[m].slice(0, 3) }; })();
+  const QREV = Math.floor(NOW.getMonth() / 3) * 3;   // latest review month: Jan, Apr, Jul or Oct
   /* ---------------- calendar (Friday) ---------------- */
   function friCal(c, S, t, vis, dateLabel) {
     if (vis <= 0) return;
     const p = S.port, cw = p ? 46 : 52, ch = p ? 40 : 36, W = cw * 7, x0 = (S.w - W) / 2, yT = p ? 76 : 62;
     c.save(); c.globalAlpha = vis;
     const sc = L(.94, 1, vis); c.translate(S.w / 2, S.h / 2); c.scale(sc, sc); c.translate(-S.w / 2, -S.h / 2);
-    T(c, 'OCTOBER 2026', S.w / 2, yT, { size: 13, w: 700, col: C.gold, al: 'center', ls: 3, a: vis });
+    T(c, CAL.title, S.w / 2, yT, { size: 13, w: 700, col: C.gold, al: 'center', ls: 3, a: vis });
     const yH = yT + 34, yD = yH + 30;
     // Friday column
-    const fk = eo(pr(t, .9, 1.4));
-    if (fk > 0) { rr(c, x0 + 4 * cw + 3, yH - 16, cw - 6, (yD - yH) + 5 * ch + 6, 10); c.fillStyle = `rgba(201,164,76,${.16 * fk})`; c.fill(); }
+    const fk = eo(pr(t, .9, 1.4)), rows = Math.ceil((CAL.off + CAL.days) / 7);
+    if (fk > 0) { rr(c, x0 + 4 * cw + 3, yH - 16, cw - 6, (yD - yH) + rows * ch + 6, 10); c.fillStyle = `rgba(201,164,76,${.16 * fk})`; c.fill(); }
     'MTWTFSS'.split('').forEach((d, i) => T(c, d, x0 + i * cw + cw / 2, yH, { size: 12, w: 700, col: i === 4 ? C.gold : C.dim, al: 'center', a: vis }));
-    for (let d = 1; d <= 31; d++) {
-      const idx = 3 + d - 1, col = idx % 7, row = Math.floor(idx / 7), a = pr(t, .05 + d * .018, .35 + d * .018) * vis;
+    for (let d = 1; d <= CAL.days; d++) {
+      const idx = CAL.off + d - 1, col = idx % 7, row = Math.floor(idx / 7), a = pr(t, .05 + d * .018, .35 + d * .018) * vis;
       const x = x0 + col * cw + cw / 2, y = yD + row * ch;
-      if (d === 30) {
+      if (d === CAL.hit) {
         const k = eo(pr(t, 1.5, 1.9));
         if (k > 0) { c.globalAlpha = vis; c.beginPath(); c.arc(x, y, 15 * k, 0, 7); c.fillStyle = C.gold; c.fill();
           const ring = pr(t, 1.9, 2.5); if (ring > 0 && ring < 1) { c.beginPath(); c.arc(x, y, 15 + ring * 14, 0, 7); c.strokeStyle = `rgba(201,164,76,${1 - ring})`; c.lineWidth = 2; c.stroke(); } }
         T(c, String(d), x, y + 1, { size: 14, w: 700, col: k > .5 ? C.ink : C.fg, al: 'center', a });
       } else T(c, String(d), x, y + 1, { size: 14, w: 500, col: col === 4 ? C.goldS : (col > 4 ? C.dim : C.mut), al: 'center', a });
     }
-    T(c, dateLabel, S.w / 2, yD + 5 * ch + (p ? 26 : 16), { size: p ? 15 : 16, w: 600, col: C.fg, al: 'center', a: pr(t, 1.6, 2.0) * vis });
+    T(c, dateLabel, S.w / 2, yD + rows * ch + (p ? 26 : 16), { size: p ? 15 : 16, w: 600, col: C.fg, al: 'center', a: pr(t, 1.6, 2.0) * vis });
     c.restore();
   }
 
@@ -156,7 +165,7 @@
           c.globalAlpha = a; rr(c, x, y, pw, ph, 10); c.fillStyle = qk > 0 ? mix(C.tile, C.gold, qk) : C.tile; c.fill();
           T(c, m, x + pw / 2, y + ph / 2 - 4, { size: 12, w: 700, col: qk > .5 ? C.ink : C.mut, al: 'center', a });
           const dk = pr(t, .45 + i * .05, .7 + i * .05); c.globalAlpha = a * dk; c.beginPath(); c.arc(x + pw / 2, y + ph - 9, 3, 0, 7); c.fillStyle = qk > .5 ? C.ink : C.dim; c.fill();
-          if (i === 9) { const r = pr(t, 1.9, 2.5); if (r > 0 && r < 1) { c.globalAlpha = (1 - r) * vis; rr(c, x - r * 8, y - r * 8, pw + r * 16, ph + r * 16, 12); c.strokeStyle = C.gold; c.lineWidth = 2; c.stroke(); } }
+          if (i === QREV) { const r = pr(t, 1.9, 2.5); if (r > 0 && r < 1) { c.globalAlpha = (1 - r) * vis; rr(c, x - r * 8, y - r * 8, pw + r * 16, ph + r * 16, 12); c.strokeStyle = C.gold; c.lineWidth = 2; c.stroke(); } }
         });
         c.globalAlpha = 1;
         const yc = y0 + (p ? 2 : 1) * (ph + 14) + 18;
@@ -164,7 +173,7 @@
         T(c, 'Funds change only at the quarterly review', S.w / 2, yc + 26, { size: 15, w: 700, col: C.gold, al: 'center', a: pr(t, 1.4, 1.8) * vis });
         c.restore();
       }
-      chip(c, 'QUARTERLY REVIEW · OCTOBER', 20, p ? 30 : 28, pr(t, 2.8, 3.3));
+      chip(c, 'QUARTERLY REVIEW · ' + MON[QREV], 20, p ? 30 : 28, pr(t, 2.8, 3.3));
       if (t > 3.0) {
         const scanX = L(-20, S.w + 20, eio(pr(t, 3.9, 5.6)));
         const final = eo(pr(t, 8.4, 9.0));
@@ -369,9 +378,9 @@
   }
 
   const SCENES = {
-    stocks: S => screen(S, { seed: 7, n: 730, colsL: 37, colsP: 22, chip: 'FRIDAY 30 OCT · AFTER THE CLOSE', calLine: 'Every Friday, after the market closes',
+    stocks: S => screen(S, { seed: 7, n: 730, colsL: 37, colsP: 22, chip: CAL.chip + ' · AFTER THE CLOSE', calLine: 'Every Friday, after the market closes',
       universe: 'About 730 NSE stocks', cut: 'The top 20 make the cut', final: 'TOP 20 · THIS WEEK', after: 'Held while strong. Tested again next Friday.' }),
-    spx: S => { const g = globe(S), off = 3.7, sc = screen(S, { seed: 11, n: 503, colsL: 34, colsP: 19, chip: 'FRIDAY 30 OCT · US CLOSE', calLine: 'Every Friday, after the US market closes',
+    spx: S => { const g = globe(S), off = 3.7, sc = screen(S, { seed: 11, n: 503, colsL: 34, colsP: 19, chip: CAL.chip + ' · US CLOSE', calLine: 'Every Friday, after the US market closes',
       universe: 'All 503 S&P 500 stocks', cut: 'The top 20 make the cut, max five per sector', final: 'SPX TOP 20 · THIS WEEK', after: 'Held while strong. Tested again next Friday.' });
       return { T: sc.T + off, still: sc.still + off, draw(c, t) {
         if (t < off) { g.draw(c, t); const k = pr(t, off - .45, off); if (k > 0) { c.globalAlpha = k; c.fillStyle = C.bg; c.fillRect(0, 0, S.w, S.h); c.globalAlpha = 1; } }
